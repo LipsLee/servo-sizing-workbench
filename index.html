@@ -1350,6 +1350,49 @@ summary:focus-visible {
   text-align: left;
 }
 
+.drive-plan {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.drive-plan-table {
+  min-width: 1080px;
+}
+
+.drive-plan-table td {
+  vertical-align: top;
+  white-space: normal;
+}
+
+.drive-plan-table td.model {
+  min-width: 150px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-align: left;
+}
+
+.drive-plan-table td.model small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.drive-plan-table .plan-note {
+  min-width: 210px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.recommend-driver .driver-part {
+  color: var(--lime);
+  font-family: var(--font-mono);
+}
+
 .toast {
   position: fixed;
   right: 22px;
@@ -1970,7 +2013,7 @@ summary:focus-visible {
       <div class="top-status" aria-label="系统状态">
         <span class="top-chip"><i class="dot"></i>LOCAL / OFFLINE</span>
         <span class="top-chip">F-SERIES · 68 MOTORS</span>
-        <span class="top-chip" id="buildStamp">BUILD 2026-11-03 20:36</span>
+        <span class="top-chip" id="buildStamp">BUILD 2026-11-03 20:55</span>
       </div>
     </header>
 
@@ -1991,7 +2034,7 @@ summary:focus-visible {
           <b>工作口径</b><br>
           仅使用简易填参：负载质量、减速比、丝杆导程/外径/长度、最高速度、加速度和姿态倾角。摩擦按原厂 v2 固定 μ=0.10；内孔、工艺力、预紧、行程和 RMS 不作为输入。<br><br>
           <b>数据范围</b><br>
-          仅新代 F 系列 68 款；驱动器为单轴 380V 电流匹配参考，不替代正式驱动选型。
+          新代 F 系列 68 款；驱动目录含 17 款单轴与 16 组多合一配置。按同电压等级优先分配多合一轴模块，无法满足时再回退单轴驱动；30% 电流余量为初选口径，正式接线与过载曲线仍需复核。
         </div>
       </aside>
 
@@ -2139,8 +2182,9 @@ I_req,drive = max(I_motor,max, I_peak) / K_drive
 
   <script>
 const MOTORS = [{"PartNo":"S08-AM11-30B-F4","ModelNo":"AM11-30B-F4","Watt":2.4,"Voltage":380.0,"RatedCurrent":5.7,"MaxCurrent":17.1,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40B-F3","ModelNo":"AM11-40B-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40BK-F3","ModelNo":"AM11-40BK-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM11-40-F3","ModelNo":"AM11-40-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":26.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":185.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40K-F3","ModelNo":"AM11-40K-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":26.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":185.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM11-50K-F1","ModelNo":"AM11-50K-F1","Watt":2.3,"Voltage":380.0,"RatedCurrent":7.6,"MaxCurrent":31.0916,"RatedSpeed":2000.0,"MaxSpeed":5000.0,"RatedTorque":11.0,"MaxTorque":45.0,"RotorInertia":31.6,"EncoderBit":18.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":24.0,"Length":203.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-40B-F3","ModelNo":"AM15-40B-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":35.5,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":235.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM15-40BK-F3","ModelNo":"AM15-40BK-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":35.5,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":235.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-40-F3","ModelNo":"AM15-40-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":32.8,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":207.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM15-40K-F3","ModelNo":"AM15-40K-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":32.8,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":207.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-60SK-F1","ModelNo":"AM15-60SK-F1","Watt":3.1,"Voltage":380.0,"RatedCurrent":10.7,"MaxCurrent":36.9899,"RatedSpeed":2000.0,"MaxSpeed":6000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":31.6,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":24.0,"Length":220.0,"Brake":false,"KeySlot":true,"OilSeal":true},{"PartNo":"S08-AM1-60B-F2","ModelNo":"AM1-60B-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.636,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":123.6,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM1-60BK-F2","ModelNo":"AM1-60BK-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.636,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":123.6,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM1-60-F2","ModelNo":"AM1-60-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.559,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":94.9,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM1-60K-F2","ModelNo":"AM1-60K-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.559,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":94.9,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM18-30B-F4","ModelNo":"AM18-30B-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":9.7,"MaxCurrent":29.1,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":18.6,"MaxTorque":45.3,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40B-F4","ModelNo":"AM18-40B-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40BK-F4","ModelNo":"AM18-40BK-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM18-40-F4","ModelNo":"AM18-40-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":46.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":167.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40K-F4","ModelNo":"AM18-40K-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":46.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":167.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM2-60B-F2","ModelNo":"AM2-60B-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":2.59,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":131.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM2-60BK-F2","ModelNo":"AM2-60BK-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":2.59,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":131.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM2-60-F2","ModelNo":"AM2-60-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":1.64,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":96.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM2-60K-F2","ModelNo":"AM2-60K-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":1.64,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":96.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM28-30B-F4","ModelNo":"AM28-30B-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":74.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":242.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM28-30BK-F4","ModelNo":"AM28-30BK-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":74.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":242.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM28-30-F4","ModelNo":"AM28-30-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":69.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":194.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM28-30K-F4","ModelNo":"AM28-30K-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":69.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":194.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-20B-F5","ModelNo":"AM35-20B-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-20BK-F5","ModelNo":"AM35-20BK-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-20-F5","ModelNo":"AM35-20-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-20K-F5","ModelNo":"AM35-20K-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-30B-F5","ModelNo":"AM35-30B-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-30BK-F5","ModelNo":"AM35-30BK-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-30-F5","ModelNo":"AM35-30-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-30K-F5","ModelNo":"AM35-30K-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM3-60B-F4","ModelNo":"AM3-60B-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.85,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":182.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM3-60BK-F4","ModelNo":"AM3-60BK-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.85,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":182.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM3-60-F4","ModelNo":"AM3-60-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.5,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":141.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM3-60K-F4","ModelNo":"AM3-60K-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.5,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":141.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-20B-F5","ModelNo":"AM48-20B-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":140.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":335.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-20BK-F5","ModelNo":"AM48-20BK-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":140.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":335.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-20-F5","ModelNo":"AM48-20-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":125.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":272.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-20K-F5","ModelNo":"AM48-20K-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":125.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":272.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-30B-F5","ModelNo":"AM48-30B-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":235.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":373.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-30BK-F5","ModelNo":"AM48-30BK-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":235.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":373.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-30-F5","ModelNo":"AM48-30-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":220.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":312.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-30K-F5","ModelNo":"AM48-30K-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":220.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":312.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM5-40B-F3","ModelNo":"AM5-40B-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":16.0,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":175.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM5-40BK-F3","ModelNo":"AM5-40BK-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":16.0,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":175.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM5-40-F3","ModelNo":"AM5-40-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":13.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":143.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM5-40K-F3","ModelNo":"AM5-40K-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":13.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":143.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM70-20B-F1","ModelNo":"AM70-20B-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":274.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":528.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM70-20BK-F1","ModelNo":"AM70-20BK-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":274.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":528.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM70-20-F1","ModelNo":"AM70-20-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":243.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":478.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM70-20K-F1","ModelNo":"AM70-20K-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":243.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":478.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-40B-F3","ModelNo":"AM8-40B-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":23.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":192.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM8-40BK-F3","ModelNo":"AM8-40BK-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":23.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":192.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-40-F3","ModelNo":"AM8-40-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":20.6,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":164.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM8-40K-F3","ModelNo":"AM8-40K-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":20.6,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":164.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-50K-F1","ModelNo":"AM8-50K-F1","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.0,"MaxCurrent":18.0,"RatedSpeed":2000.0,"MaxSpeed":5000.0,"RatedTorque":8.0,"MaxTorque":24.0,"RotorInertia":19.0,"EncoderBit":18.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":22.0,"Length":160.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-60SK-F1","ModelNo":"AM8-60SK-F1","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.0,"MaxCurrent":20.196,"RatedSpeed":2000.0,"MaxSpeed":6000.0,"RatedTorque":8.0,"MaxTorque":24.0,"RotorInertia":19.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":22.0,"Length":175.0,"Brake":false,"KeySlot":true,"OilSeal":true},{"PartNo":"S10-AM90-30-F4J","ModelNo":"AM90-30-F4","Watt":18.8,"Voltage":380.0,"RatedCurrent":35.3,"MaxCurrent":100.9,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":90.0,"MaxTorque":250.0,"RotorInertia":297.0,"EncoderBit":24.0,"MotorSupplier":"F4","Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S10-AM90-30B-F4J","ModelNo":"AM90-30B-F4","Watt":18.8,"Voltage":380.0,"RatedCurrent":35.3,"MaxCurrent":100.9,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":90.0,"MaxTorque":250.0,"RotorInertia":353.0,"EncoderBit":24.0,"MotorSupplier":"F4","Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20B-F1","ModelNo":"AM95-20B-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":317.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":582.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20BK-F1","ModelNo":"AM95-20BK-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":317.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":582.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM95-20-F1","ModelNo":"AM95-20-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":286.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":531.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20K-F1","ModelNo":"AM95-20K-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":286.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":531.5,"Brake":false,"KeySlot":true,"OilSeal":false}];
-const DRIVES = [{"PartNo":"S08-SPD32B1-300","ModelNo":"SPD32B1-300","DriveType":"SPD","Voltage":380.0,"Watt":30.0,"ElectricPhase":"ThreePhase","RatedCurrent":60.0,"MaxCurrent":106.0,"ModelCode":"B1","DriveSize":"SizeE","RegenRESPartNo":"S03-4000W-10O-A"},{"PartNo":"S08-SPD32B1-450","ModelNo":"SPD32B1-450","DriveType":"SPD","Voltage":380.0,"Watt":45.0,"ElectricPhase":"ThreePhase","RatedCurrent":91.0,"MaxCurrent":151.0,"ModelCode":"B1","DriveSize":"SizeF","RegenRESPartNo":"S03-3000W-20O*2並聯 或 S03-3000W-20O-A*2並聯"},{"PartNo":"S08-SPD32B1-550","ModelNo":"SPD32B1-550","DriveType":"SPD","Voltage":380.0,"Watt":55.0,"ElectricPhase":"ThreePhase","RatedCurrent":112.0,"MaxCurrent":201.0,"ModelCode":"B1","DriveSize":"SizeF","RegenRESPartNo":"S03-4000W-10OA*2並聯"},{"PartNo":"S08-SPD32C1-110","ModelNo":"SPD32C1-110","DriveType":"SPD","Voltage":380.0,"Watt":11.0,"ElectricPhase":"ThreePhase","RatedCurrent":27.0,"MaxCurrent":53.0,"ModelCode":"C1","DriveSize":"SizeD","RegenRESPartNo":"S03-3000W-20O"},{"PartNo":"S08-SPD32C1-185","ModelNo":"SPD32C1-185","DriveType":"SPD","Voltage":380.0,"Watt":18.5,"ElectricPhase":"ThreePhase","RatedCurrent":42.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SPD32C1-220","ModelNo":"SPD32C1-220","DriveType":"SPD","Voltage":380.0,"Watt":22.0,"ElectricPhase":"ThreePhase","RatedCurrent":53.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SPD32D1-075","ModelNo":"SPD32D1-075","DriveType":"SPD","Voltage":380.0,"Watt":7.5,"ElectricPhase":"ThreePhase","RatedCurrent":21.0,"MaxCurrent":35.0,"ModelCode":"D1","DriveSize":"SizeC++","RegenRESPartNo":"S03-1000W-30R(Axis) S03-3000W-30O-A(Spindle)"},{"PartNo":"S08-SPD32F1-050","ModelNo":"SPD32F1-050","DriveType":"SPD","Voltage":380.0,"Watt":5.0,"ElectricPhase":"ThreePhase","RatedCurrent":15.0,"MaxCurrent":35.0,"ModelCode":"F1","DriveSize":"SizeC++","RegenRESPartNo":"S03-1000W-30R(Axis) S03-3000W-30O-A(Spindle)"},{"PartNo":"S08-SVD22D1-010","ModelNo":"SVD22D1-010","DriveType":"SVD","Voltage":220.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":7.6,"MaxCurrent":14.1,"ModelCode":"D1","DriveSize":"SizeA","RegenRESPartNo":"S03-500W-40R-A"},{"PartNo":"S08-SVD22D1-030","ModelNo":"SVD22D1-030","DriveType":"SVD","Voltage":220.0,"Watt":3.0,"ElectricPhase":"ThreePhase","RatedCurrent":17.6,"MaxCurrent":42.4,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-20O-A"},{"PartNo":"S08-SVD32C1-110","ModelNo":"SVD32C1-110","DriveType":"SVD","Voltage":380.0,"Watt":11.0,"ElectricPhase":"ThreePhase","RatedCurrent":27.0,"MaxCurrent":53.0,"ModelCode":"C1","DriveSize":"SizeD","RegenRESPartNo":"S03-3000W/20Ω"},{"PartNo":"S08-SVD32C1-220","ModelNo":"SVD32C1-220","DriveType":"SVD","Voltage":380.0,"Watt":22.0,"ElectricPhase":"ThreePhase","RatedCurrent":53.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SVD32D1-010","ModelNo":"SVD32D1-010","DriveType":"SVD","Voltage":380.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":4.3,"MaxCurrent":12.9,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-40R-A"},{"PartNo":"S08-SVD32D1-020","ModelNo":"SVD32D1-020","DriveType":"SVD","Voltage":380.0,"Watt":2.0,"ElectricPhase":"ThreePhase","RatedCurrent":8.4,"MaxCurrent":19.8,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-40R-A"}];
-const BUILD_STAMP = "2026-11-03 20:36";
+const DRIVES = [{"PartNo":"S08-SVD22C1-010","ModelNo":"SVD22C1-010","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":0,"Voltage":220.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":7.6,"MaxCurrent":14.1,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size A","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SVD22C1-030","ModelNo":"SVD22C1-030","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":0,"Voltage":220.0,"Watt":3.0,"ElectricPhase":"ThreePhase","RatedCurrent":17.6,"MaxCurrent":42.4,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B","RegenRESPartNo":"Built-in / S03-500W-20O-A"},{"PartNo":"S08-SVD32C1-010","ModelNo":"SVD32C1-010","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":0,"Voltage":380.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":4.3,"MaxCurrent":12.9,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SVD32C1-020","ModelNo":"SVD32C1-020","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":0,"Voltage":380.0,"Watt":2.0,"ElectricPhase":"ThreePhase","RatedCurrent":8.4,"MaxCurrent":19.8,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SPD32E1-050","ModelNo":"SPD32E1-050","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":5.0,"ElectricPhase":"ThreePhase","RatedCurrent":15.0,"MaxCurrent":35.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size C","RegenRESPartNo":"S03-1000W-30R-A(Axis) / S03-3000W-30R(Spindle)"},{"PartNo":"S08-SPD32C1-075","ModelNo":"SPD32C1-075","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":7.5,"ElectricPhase":"ThreePhase","RatedCurrent":21.0,"MaxCurrent":35.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size C","RegenRESPartNo":"S03-1000W-30R-A(Axis) / S03-3000W-30R(Spindle)"},{"PartNo":"S08-SPD32C1-110","ModelNo":"SPD32C1-110","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":11.0,"ElectricPhase":"ThreePhase","RatedCurrent":27.0,"MaxCurrent":53.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size D","RegenRESPartNo":"S03-3000W-20O"},{"PartNo":"S08-SPD32C1-220","ModelNo":"SPD32C1-220","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":22.0,"ElectricPhase":"ThreePhase","RatedCurrent":53.0,"MaxCurrent":106.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size D+","RegenRESPartNo":"S03-3000W-10O or S03-3000W-10O-A"},{"PartNo":"S08-SPD32B1-300","ModelNo":"SPD32B1-300","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":30.0,"ElectricPhase":"ThreePhase","RatedCurrent":60.0,"MaxCurrent":106.0,"EncoderPorts":"6pin x 2 + 10pin","Communication":"M2 / M3","DriveSize":"Size E","RegenRESPartNo":"S03-4000W-100-A"},{"PartNo":"S08-SPD32B1-450","ModelNo":"SPD32B1-450","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":45.0,"ElectricPhase":"ThreePhase","RatedCurrent":91.0,"MaxCurrent":151.0,"EncoderPorts":"6pin x 2 + 10pin","Communication":"M2 / M3","DriveSize":"Size F","RegenRESPartNo":"S03-3000W-20O x 2 (parallel)"},{"PartNo":"S08-SPD32B1-550","ModelNo":"SPD32B1-550","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Non-lithium","FamilyPriority":1,"Voltage":380.0,"Watt":55.0,"ElectricPhase":"ThreePhase","RatedCurrent":112.0,"MaxCurrent":201.0,"EncoderPorts":"6pin x 2 + 10pin","Communication":"M2 / M3","DriveSize":"Size F","RegenRESPartNo":"S03-4000W-10O-A x 2 (parallel)"},{"PartNo":"S08-SVD22D1-010","ModelNo":"SVD22D1-010","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":0,"Voltage":220.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":7.6,"MaxCurrent":14.1,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size A-BAT","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SVD22D1-030","ModelNo":"SVD22D1-030","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":0,"Voltage":220.0,"Watt":3.0,"ElectricPhase":"ThreePhase","RatedCurrent":17.6,"MaxCurrent":42.4,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B-BAT","RegenRESPartNo":"Built-in / S03-500W-20O-A"},{"PartNo":"S08-SVD32D1-010","ModelNo":"SVD32D1-010","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":0,"Voltage":380.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":4.3,"MaxCurrent":12.9,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B-BAT","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SVD32D1-020","ModelNo":"SVD32D1-020","DriveType":"SVD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":0,"Voltage":380.0,"Watt":2.0,"ElectricPhase":"ThreePhase","RatedCurrent":8.4,"MaxCurrent":19.8,"EncoderPorts":"6pin x 1","Communication":"M3","DriveSize":"Size B-BAT","RegenRESPartNo":"Built-in / S03-500W-40R-A"},{"PartNo":"S08-SPD32F1-050","ModelNo":"SPD32F1-050","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":1,"Voltage":380.0,"Watt":5.0,"ElectricPhase":"ThreePhase","RatedCurrent":15.0,"MaxCurrent":35.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size C-BAT","RegenRESPartNo":"S03-1000W-30R-A(Axis) / S03-3000W-30R(Spindle)"},{"PartNo":"S08-SPD32D1-075","ModelNo":"SPD32D1-075","DriveType":"SPD","Category":"SingleAxis","BatteryVariant":"Standard lithium","FamilyPriority":1,"Voltage":380.0,"Watt":7.5,"ElectricPhase":"ThreePhase","RatedCurrent":21.0,"MaxCurrent":35.0,"EncoderPorts":"6pin x 2","Communication":"M3","DriveSize":"Size C-BAT","RegenRESPartNo":"S03-1000W-30R-A(Axis) / S03-3000W-30R(Spindle)"}];
+const MULTI_DRIVES = [{"ModelNo":"SMD-30/30-XS","PartNo":"SMD22B20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Non-lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 2","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMD-30/30/30-XS","PartNo":"SMD23B20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Non-lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 3","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMD-30/30/30/30-XS","PartNo":"SMD24B20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Non-lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 4","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMH-25/25-75-M","PartNo":"SMD33B2575-00","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Non-lithium","DrivePriority":0,"DriveSize":"M","AxisModules":[{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":5.4,"MaxCurrent":14.1}],"SpindleModule":{"RatedCurrent":21.0,"MaxCurrent":53.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-20O","Notes":""},{"ModelNo":"SMH-25/25/35-75-XL","PartNo":"SMD34D2550-00","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Non-lithium","DrivePriority":0,"DriveSize":"XL","AxisModules":[{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":8.4,"MaxCurrent":19.8}],"SpindleModule":{"RatedCurrent":27.0,"MaxCurrent":53.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-20O","Notes":""},{"ModelNo":"SMD-30/30-XS","PartNo":"SMD22C20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Standard lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 2","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMD-30/30/30-XS","PartNo":"SMD23C20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Standard lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 3","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMD-30/30/30/30-XS","PartNo":"SMD24C20-00","DriveType":"SMD","Category":"ServoMulti","Voltage":220.0,"BatteryVariant":"Standard lithium","DrivePriority":1,"DriveSize":"XS","AxisModules":[{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1},{"RatedCurrent":7.6,"MaxCurrent":14.1}],"SpindleModule":null,"EncoderPorts":"6pin x 4","BrakeResistor":"Built-in / S03-500W-20O-A","Notes":""},{"ModelNo":"SMH-20/20-50-M","PartNo":"SMD33C2050-00","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"M","AxisModules":[{"RatedCurrent":3.5,"MaxCurrent":14.1},{"RatedCurrent":3.5,"MaxCurrent":14.1}],"SpindleModule":{"RatedCurrent":15.0,"MaxCurrent":35.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-30R","Notes":""},{"ModelNo":"SMH-25/25-75-M","PartNo":"SMD33C2575-00","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"M","AxisModules":[{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":5.4,"MaxCurrent":14.1}],"SpindleModule":{"RatedCurrent":21.0,"MaxCurrent":53.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-20O","Notes":""},{"ModelNo":"SMH-35/35-100-M","PartNo":"SMD33C35100-00","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"M","AxisModules":[{"RatedCurrent":8.4,"MaxCurrent":19.8},{"RatedCurrent":8.4,"MaxCurrent":19.8}],"SpindleModule":{"RatedCurrent":27.0,"MaxCurrent":71.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-20O","Notes":""},{"ModelNo":"SMH-20/20/20-50-XL","PartNo":"S08-SMD34E2250-4","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"XL","AxisModules":[{"RatedCurrent":3.5,"MaxCurrent":14.1},{"RatedCurrent":3.5,"MaxCurrent":14.1},{"RatedCurrent":3.5,"MaxCurrent":14.1}],"SpindleModule":{"RatedCurrent":15.0,"MaxCurrent":35.0},"EncoderPorts":"6pin x 4","BrakeResistor":"S03-3000W-30R","Notes":""},{"ModelNo":"SMH-25/25/35-75-XL","PartNo":"SMD34E2550-00","AlternativePartNo":"SMD34E2550-04","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"XL","AxisModules":[{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":5.4,"MaxCurrent":14.1},{"RatedCurrent":8.4,"MaxCurrent":19.8}],"SpindleModule":{"RatedCurrent":27.0,"MaxCurrent":53.0},"EncoderPorts":"6pin x 4（-00）/ 6pin x 5（-04）","BrakeResistor":"S03-3000W-20O","Notes":"-04 标配 5 个 6pin 编码器接口，不能搭配编码器扩充卡。"},{"ModelNo":"SMH-35/35/35-100-XL","PartNo":"SMD34E3575-00","AlternativePartNo":"SMD34E3575-04","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"XL","AxisModules":[{"RatedCurrent":8.4,"MaxCurrent":19.8},{"RatedCurrent":8.4,"MaxCurrent":19.8},{"RatedCurrent":8.4,"MaxCurrent":19.8}],"SpindleModule":{"RatedCurrent":34.0,"MaxCurrent":71.0},"EncoderPorts":"6pin x 4（-00）/ 6pin x 5（-04）","BrakeResistor":"S03-3000W-20O","Notes":"-04 标配 5 个 6pin 编码器接口，不能搭配编码器扩充卡。"},{"ModelNo":"SMH-50/50/50-150-XL","PartNo":"SMD34E50150-00","AlternativePartNo":"SMD34E50150-04","DriveType":"SMH","Category":"ServoMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":0,"DriveSize":"XL","AxisModules":[{"RatedCurrent":11.9,"MaxCurrent":28.2},{"RatedCurrent":11.9,"MaxCurrent":28.2},{"RatedCurrent":11.9,"MaxCurrent":28.2}],"SpindleModule":{"RatedCurrent":53.0,"MaxCurrent":106.0},"EncoderPorts":"6pin x 4（-00）/ 6pin x 5（-04）","BrakeResistor":"S03-4000W-100","Notes":"-04 标配 5 个 6pin 编码器接口，不能搭配编码器扩充卡。"},{"ModelNo":"RMH-35/50/35/35-100","PartNo":"S08-RMD36A35100-0","AlternativePartNo":"S08-RMD36A35100-5","DriveType":"RMH","Category":"InverterMulti","Voltage":380.0,"BatteryVariant":"Standard lithium","DrivePriority":2,"DriveSize":"Multi","AxisModules":[{"RatedCurrent":9.0,"MaxCurrent":20.0},{"RatedCurrent":9.0,"MaxCurrent":20.0},{"RatedCurrent":11.9,"MaxCurrent":28.0},{"RatedCurrent":9.0,"MaxCurrent":20.0},{"RatedCurrent":9.0,"MaxCurrent":20.0}],"SpindleModule":{"RatedCurrent":34.0,"MaxCurrent":71.0},"EncoderPorts":"6pin x 7（-0）/ 6pin x 7 + 10pin x 2（-5）","BrakeResistor":"S11-RCT-32□1-40A reactor","Notes":"逆变多合一无需制动电阻，必须搭配电抗器；无法搭配编码器扩充卡。"}];
+const BUILD_STAMP = "2026-11-03 20:55";
 "use strict";
 
 const STORAGE_KEY = "cf2512.workbench.v5";
@@ -2751,30 +2795,99 @@ function computeBase(axis) {
   };
 }
 
-function findDrive(motor, peakCurrent) {
-  const voltage = num(motor.Voltage);
+function driveDemand(motor, peakCurrent) {
   const currentLoad = Math.max(num(motor.MaxCurrent), num(peakCurrent));
   const designFactor = FIXED.driveCurrentReserve;
-  const requiredMax = currentLoad / designFactor;
-  const exact = DRIVES
-    .filter((drive) => drive.DriveType === "SPD" &&
-      num(drive.Voltage) === voltage &&
-      num(drive.RatedCurrent) >= num(motor.RatedCurrent) &&
-      num(drive.MaxCurrent) >= requiredMax)
-    .sort((a, b) => num(a.MaxCurrent) - num(b.MaxCurrent) || num(a.Watt) - num(b.Watt));
-  if (exact.length) {
-    return { ...exact[0], exact: true, requiredMax, designFactor, currentLoad };
-  }
+  return {
+    voltage: num(motor.Voltage),
+    motorRatedCurrent: num(motor.RatedCurrent),
+    currentLoad,
+    requiredMax: currentLoad / designFactor,
+    designFactor
+  };
+}
 
-  const loose = DRIVES
-    .filter((drive) => drive.DriveType === "SPD" &&
-      num(drive.Voltage) === voltage &&
-      num(drive.MaxCurrent) >= requiredMax)
-    .sort((a, b) => num(a.MaxCurrent) - num(b.MaxCurrent));
-  if (loose.length) {
-    return { ...loose[0], exact: false, requiredMax, designFactor, currentLoad };
-  }
-  return null;
+function moduleFits(module, demand) {
+  return num(module.RatedCurrent) >= demand.motorRatedCurrent - 1e-9 &&
+    num(module.MaxCurrent) >= demand.requiredMax - 1e-9;
+}
+
+function singleDriveFits(drive, demand) {
+  return num(drive.Voltage) === demand.voltage &&
+    num(drive.RatedCurrent) >= demand.motorRatedCurrent - 1e-9 &&
+    num(drive.MaxCurrent) >= demand.requiredMax - 1e-9;
+}
+
+function singleDriveSort(a, b) {
+  return num(a.FamilyPriority, 9) - num(b.FamilyPriority, 9) ||
+    num(a.MaxCurrent) - num(b.MaxCurrent) ||
+    num(a.RatedCurrent) - num(b.RatedCurrent) ||
+    num(a.Watt) - num(b.Watt) ||
+    String(a.PartNo).localeCompare(String(b.PartNo));
+}
+
+function multiDriveSort(a, b) {
+  return num(a.DrivePriority, 9) - num(b.DrivePriority, 9) ||
+    num(a.selectedModule.MaxCurrent) - num(b.selectedModule.MaxCurrent) ||
+    num(a.AxisModules.length) - num(b.AxisModules.length) ||
+    String(a.PartNo).localeCompare(String(b.PartNo));
+}
+
+function multiDriveOptions(demand) {
+  const options = [];
+  MULTI_DRIVES.forEach((drive) => {
+    if (num(drive.Voltage) !== demand.voltage) return;
+    const candidates = (drive.AxisModules || [])
+      .map((module, index) => ({ module, index }))
+      .filter((entry) => moduleFits(entry.module, demand))
+      .sort((a, b) =>
+        num(a.module.MaxCurrent) - num(b.module.MaxCurrent) ||
+        num(a.module.RatedCurrent) - num(b.module.RatedCurrent) ||
+        a.index - b.index);
+    if (!candidates.length) return;
+    const selected = candidates[0];
+    options.push({
+      ...drive,
+      SelectionType: "MultiAxis",
+      SelectionLabel: "多合一",
+      ModuleIndex: selected.index,
+      SelectedModule: selected.module,
+      ModuleCandidates: candidates,
+      RatedCurrent: num(selected.module.RatedCurrent),
+      MaxCurrent: num(selected.module.MaxCurrent),
+      selectedModule: selected.module,
+      ...demand,
+      exact: true
+    });
+  });
+  return options.sort(multiDriveSort);
+}
+
+function singleDriveOptions(demand) {
+  return DRIVES
+    .filter((drive) => singleDriveFits(drive, demand))
+    .sort(singleDriveSort)
+    .map((drive) => ({
+      ...drive,
+      SelectionType: "SingleAxis",
+      SelectionLabel: "单轴",
+      ...demand,
+      exact: true
+    }));
+}
+
+function findDrive(motor, peakCurrent) {
+  const demand = driveDemand(motor, peakCurrent);
+  const multiCandidates = multiDriveOptions(demand);
+  const singleCandidates = singleDriveOptions(demand);
+  const preferred = multiCandidates[0] || singleCandidates[0] || null;
+  return {
+    ...(preferred || {}),
+    ...demand,
+    exact: Boolean(preferred),
+    multiCandidates,
+    singleCandidates
+  };
 }
 
 function evaluateMotor(base, motor) {
@@ -2798,7 +2911,7 @@ function evaluateMotor(base, motor) {
   if (peakMargin < 1 - 1e-9) failures.push("峰值扭矩");
   if (speedMargin < 1 - 1e-9) failures.push("最高转速");
   if (currentMargin < 1 - 1e-9) failures.push("峰值电流");
-  if (!drive || !drive.exact) failures.push("驱动器电流");
+  if (!drive.exact) failures.push("驱动器电流");
   const status = failures.length ? "fail" : "pass";
 
   return {
@@ -2819,6 +2932,123 @@ function evaluateMotor(base, motor) {
     status,
     peakPower: peakTorque * 2 * Math.PI * Math.min(base.motorSpeed, num(motor.MaxSpeed)) / 60 / 1000
   };
+}
+
+function assignModulesToDrive(drive, items) {
+  const modules = (drive.AxisModules || [])
+    .map((module, index) => ({ module, index }))
+    .sort((a, b) =>
+      num(a.module.MaxCurrent) - num(b.module.MaxCurrent) ||
+      num(a.module.RatedCurrent) - num(b.module.RatedCurrent) ||
+      a.index - b.index);
+  const demands = [...items].sort((a, b) =>
+    b.demand.requiredMax - a.demand.requiredMax ||
+    String(a.axis.name).localeCompare(String(b.axis.name)));
+  const used = new Set();
+  const assignments = [];
+  demands.forEach((item) => {
+    const match = modules.find((entry) =>
+      !used.has(entry.index) && moduleFits(entry.module, item.demand));
+    if (!match) return;
+    used.add(match.index);
+    assignments.push({ ...item, module: match.module, moduleIndex: match.index });
+  });
+  return assignments;
+}
+
+function betterMultiGroup(candidate, current) {
+  if (!current) return true;
+  if (candidate.assignments.length !== current.assignments.length) {
+    return candidate.assignments.length > current.assignments.length;
+  }
+  const priority = num(candidate.drive.DrivePriority, 9) - num(current.drive.DrivePriority, 9);
+  if (priority !== 0) return priority < 0;
+  if (candidate.headroom !== current.headroom) return candidate.headroom < current.headroom;
+  if (candidate.drive.AxisModules.length !== current.drive.AxisModules.length) {
+    return candidate.drive.AxisModules.length < current.drive.AxisModules.length;
+  }
+  return String(candidate.drive.PartNo).localeCompare(String(current.drive.PartNo)) < 0;
+}
+
+function findBestMultiGroup(items) {
+  let best = null;
+  MULTI_DRIVES.forEach((drive) => {
+    const assignments = assignModulesToDrive(drive, items);
+    if (!assignments.length) return;
+    const candidate = {
+      drive,
+      assignments,
+      headroom: assignments.reduce((sum, item) =>
+        sum + num(item.module.MaxCurrent) - item.demand.requiredMax, 0)
+    };
+    if (betterMultiGroup(candidate, best)) best = candidate;
+  });
+  return best;
+}
+
+function buildDrivePlan(calculated) {
+  const items = calculated
+    .filter(({ result }) => result?.recommended?.drive?.exact)
+    .map(({ axis, result }) => {
+      const rec = result.recommended;
+      return {
+        axis,
+        result,
+        motor: rec.motor,
+        demand: {
+          voltage: num(rec.motor.Voltage),
+          motorRatedCurrent: num(rec.motor.RatedCurrent),
+          currentLoad: num(rec.drive.currentLoad),
+          requiredMax: num(rec.drive.requiredMax),
+          designFactor: FIXED.driveCurrentReserve
+        }
+      };
+    });
+  let remaining = [...items];
+  const multiUnits = [];
+  while (remaining.length) {
+    const group = findBestMultiGroup(remaining);
+    if (!group) break;
+    const assignedIds = new Set(group.assignments.map((item) => item.axis.id));
+    multiUnits.push(group);
+    remaining = remaining.filter((item) => !assignedIds.has(item.axis.id));
+  }
+
+  const singles = [];
+  const unallocated = [];
+  remaining.forEach((item) => {
+    const drive = singleDriveOptions(item.demand)[0];
+    if (drive) singles.push({ ...item, drive });
+    else unallocated.push(item);
+  });
+
+  const axisDrives = {};
+  multiUnits.forEach((group) => {
+    group.assignments.forEach((assignment) => {
+      axisDrives[assignment.axis.id] = {
+        ...group.drive,
+        SelectionType: "MultiAxis",
+        SelectionLabel: "多合一",
+        ModuleIndex: assignment.moduleIndex,
+        SelectedModule: assignment.module,
+        RatedCurrent: num(assignment.module.RatedCurrent),
+        MaxCurrent: num(assignment.module.MaxCurrent),
+        requiredMax: assignment.demand.requiredMax,
+        currentLoad: assignment.demand.currentLoad,
+        designFactor: FIXED.driveCurrentReserve,
+        exact: true,
+        UnitAxisNames: group.assignments.map((entry) => entry.axis.name)
+      };
+    });
+  });
+  singles.forEach((item) => {
+    axisDrives[item.axis.id] = {
+      ...item.drive,
+      UnitAxisNames: [item.axis.name]
+    };
+  });
+
+  return { multiUnits, singles, unallocated, axisDrives };
 }
 
 function dedupeMotors(motors) {
@@ -2922,6 +3152,18 @@ function structureTags(motor) {
   ].filter(Boolean).join(" ") || '<span class="tag">标准</span>';
 }
 
+function driveTypeText(drive) {
+  if (!drive) return "无匹配";
+  if (drive.SelectionType === "MultiAxis") return "多合一";
+  return "单轴";
+}
+
+function driveModuleText(drive) {
+  if (!drive) return "";
+  if (drive.SelectionType !== "MultiAxis") return drive.DriveSize || "";
+  return `轴模块 #${drive.ModuleIndex + 1} · ${fmt(drive.RatedCurrent, 1)} / ${fmt(drive.MaxCurrent, 1)} A`;
+}
+
 function candidateRow(candidate, index, recommendedId, axis, result) {
   const motor = candidate.motor;
   const ratioWithinLimit = candidate.inertiaRatio < FIXED.inertiaLimit - 1e-9;
@@ -2931,8 +3173,8 @@ function candidateRow(candidate, index, recommendedId, axis, result) {
   const reasons = candidate.failures.length
     ? candidate.failures.join(" / ")
     : "六项核心判据通过";
-  const driveText = candidate.drive
-    ? `${esc(candidate.drive.ModelNo)}<br><span class="${candidate.drive.exact ? "muted-text" : "fail-text"}">需求 ${fmt(candidate.drive.requiredMax, 1)} / 最大 ${fmt(candidate.drive.MaxCurrent, 1)} A</span>`
+  const driveText = candidate.drive?.exact
+    ? `${esc(candidate.drive.ModelNo)}<br><span class="muted-text">${driveTypeText(candidate.drive)} · 需求 ${fmt(candidate.drive.requiredMax, 1)} / 最大 ${fmt(candidate.drive.MaxCurrent, 1)} A</span>`
     : '<span class="fail-text">无匹配</span>';
   const recommended = motor.PartNo === recommendedId;
   return `
@@ -3011,7 +3253,7 @@ function renderAlerts(result, axis) {
     </div>`).join("")}</div>`;
 }
 
-function renderRecommendation(result, axis) {
+function renderRecommendationLegacy(result, axis) {
   const rec = result.recommended;
   if (!rec) {
     return `
@@ -3051,6 +3293,60 @@ function renderRecommendation(result, axis) {
         <p>${driver
           ? `基础校核已计入驱动器 30% 电流余量：实际需求 ${fmt(driver.currentLoad, 1)} A ÷ 0.7，要求驱动器最大电流 ≥ ${fmt(driver.requiredMax, 1)} A。`
           : "当前 SPD 目录中没有满足额定电流、峰值电流及 30% 余量要求的驱动器。"}</p>
+      </div>
+    </div>`;
+}
+
+function renderRecommendation(result, axis, plan) {
+  const rec = result.recommended;
+  if (!rec) {
+    return `
+      <div class="alert danger">
+        <span class="alert-icon">×</span>
+        <span>没有可评估的 F 系列型号。请检查抱闸与特殊结构筛选条件。</span>
+      </div>`;
+  }
+  const motor = rec.motor;
+  const driver = plan?.axisDrives?.[axis.id] || null;
+  const recReason = rec.status === "pass"
+    ? `六项核心判据通过，按额定功率和最大扭矩从小到大优先；惯量比 ${pct(rec.inertiaRatio)}，峰值扭矩余量 ${fmt(rec.peakMargin, 2)}×，静止扭矩余量 ${fmt(rec.staticMargin, 2)}×。`
+    : `当前最接近方案，仍有 ${esc(rec.failures.join("、"))} 未通过。`;
+  const unitAxes = driver?.UnitAxisNames?.join(" / ") || axis.name;
+  const driveDetail = driver
+    ? driver.SelectionType === "MultiAxis"
+      ? `${esc(driver.DriveType)} · ${esc(driver.BatteryVariant || "电池款未标注")} · 轴模块 #${driver.ModuleIndex + 1} · 额定 ${fmt(driver.RatedCurrent, 1)} A / 最大 ${fmt(driver.MaxCurrent, 1)} A`
+      : `${esc(driver.DriveType)} · ${esc(driver.BatteryVariant || "电池款未标注")} · 额定 ${fmt(driver.RatedCurrent, 1)} A / 最大 ${fmt(driver.MaxCurrent, 1)} A · ${esc(driver.DriveSize || "")}`
+    : "当前目录没有满足额定电流、峰值电流及 30% 电流余量的驱动配置。";
+  const driveReason = driver
+    ? driver.SelectionType === "MultiAxis"
+      ? `按“多合一优先”分配：${esc(unitAxes)} 共用本组驱动。实际需求 ${fmt(driver.currentLoad, 1)} A ÷ 0.7 = ${fmt(driver.requiredMax, 1)} A，所选轴模块最大电流 ${fmt(driver.MaxCurrent, 1)} A。`
+      : `没有可用的多合一模块槽位满足本轴电流，按“单轴回退”选择。实际需求 ${fmt(driver.currentLoad, 1)} A ÷ 0.7 = ${fmt(driver.requiredMax, 1)} A，驱动器最大电流 ${fmt(driver.MaxCurrent, 1)} A。`
+    : "需放宽机械方案或补充更大电流的驱动规格。";
+  return `
+    <div class="recommend-card">
+      <div>
+        <div class="recommend-label">Recommended servo motor</div>
+        <div class="motor-name">${esc(motor.ModelNo)}</div>
+        <div class="motor-sub">${esc(motor.PartNo)} · ${fmt(motor.Voltage, 0)} V · F 系列 · ${structureTags(motor)}</div>
+        <p class="recommend-reason">${recReason}</p>
+      </div>
+      <div class="recommend-specs">
+        <div class="recommend-spec"><span>额定功率</span><strong>${fmt(motor.Watt, 1)} kW</strong></div>
+        <div class="recommend-spec"><span>额定 / 最大扭矩</span><strong>${fmt(motor.RatedTorque, 1)} / ${fmt(motor.MaxTorque, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>转子惯量</span><strong>${fmt(motor.RotorInertia, 1)} ×10⁻⁴</strong></div>
+        <div class="recommend-spec"><span>惯量比</span><strong>${pct(rec.inertiaRatio)}</strong></div>
+        <div class="recommend-spec"><span>候选峰值扭矩</span><strong>${fmt(rec.peakTorque, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>候选峰值电流</span><strong>${fmt(rec.peakCurrent, 1)} A</strong></div>
+        <div class="recommend-spec"><span>需求 / 最高转速</span><strong>${fmt(result.base.motorSpeed, 0)} / ${fmt(motor.MaxSpeed, 0)} rpm</strong></div>
+        <div class="recommend-spec"><span>静止需求 / 额定÷3</span><strong>${fmt(result.base.staticTorque, 1)} / ${fmt(rec.staticLimit, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>抱闸结构</span><strong>${motor.Brake ? "带抱闸" : "无抱闸"}</strong></div>
+      </div>
+      <div class="recommend-driver">
+        <div class="recommend-label">驱动配置建议</div>
+        <div class="driver-name">${driver ? esc(driver.ModelNo) : "无匹配配置"}</div>
+        <p>${driver ? `${driveTypeText(driver)} · ${driveDetail}` : driveDetail}</p>
+        <p>${driveReason}</p>
+        ${driver ? `<p class="driver-part">料号 ${esc(driver.PartNo)}${driver.ModuleIndex != null ? ` · 使用模块 #${driver.ModuleIndex + 1}` : ""}</p>` : ""}
       </div>
     </div>`;
 }
@@ -3131,7 +3427,7 @@ function renderCandidateTable(result, axis) {
             <th>峰值 / 最大电流<br>A</th>
             <th>需求 / 最高转速<br>rpm</th>
             <th>静止需求 / 允许上限<br>N·m</th>
-            <th>驱动参考</th>
+            <th>驱动候选</th>
             <th>结论</th>
           </tr>
         </thead>
@@ -3171,7 +3467,7 @@ function renderCompareStrip(result) {
     </div>`;
 }
 
-function renderAxisMatrix() {
+function renderAxisMatrixLegacy() {
   const rows = state.axes
     .map((axis) => ({ axis, result: state.results[axis.id] }))
     .filter((item) => item.result);
@@ -3221,6 +3517,138 @@ function renderAxisMatrix() {
     </div>`;
 }
 
+function renderDrivePlan(plan) {
+  if (!plan || (!plan.multiUnits.length && !plan.singles.length && !plan.unallocated.length)) {
+    return "";
+  }
+  const entries = [
+    ...plan.multiUnits.map((group, index) => ({
+      mode: "多合一",
+      modeClass: "pass",
+      series: `${group.drive.DriveType} · ${group.drive.BatteryVariant || "电池款未标注"}`,
+      model: group.drive.ModelNo,
+      partNo: group.drive.PartNo,
+      modules: group.assignments.map((item) =>
+        `#${item.moduleIndex + 1} ${fmt(item.module.RatedCurrent, 1)} / ${fmt(item.module.MaxCurrent, 1)} A`).join("<br>"),
+      axes: group.assignments.map((item) =>
+        `${esc(item.axis.name)}（${esc(item.motor.ModelNo)}）`).join("<br>"),
+      currents: group.assignments.map((item) =>
+        `${fmt(item.demand.requiredMax, 1)} → ${fmt(item.module.MaxCurrent, 1)} A`).join("<br>"),
+      note: `第 ${index + 1} 组多合一驱动；优先使用共用硬件，保留 ${fmt((1 - FIXED.driveCurrentReserve) * 100, 0)}% 电流余量。`
+    })),
+    ...plan.singles.map((item) => ({
+      mode: "单轴",
+      modeClass: "warn",
+      series: `${item.drive.DriveType} · ${item.drive.BatteryVariant || "电池款未标注"}`,
+      model: item.drive.ModelNo,
+      partNo: item.drive.PartNo,
+      modules: `${item.drive.DriveSize || "单轴"}`,
+      axes: `${esc(item.axis.name)}（${esc(item.motor.ModelNo)}）`,
+      currents: `${fmt(item.demand.requiredMax, 1)} → ${fmt(item.drive.MaxCurrent, 1)} A`,
+      note: "多合一模块无法覆盖本轴电流，按单轴驱动回退。"
+    })),
+    ...plan.unallocated.map((item) => ({
+      mode: "无匹配",
+      modeClass: "fail",
+      series: "—",
+      model: "—",
+      partNo: "—",
+      modules: "—",
+      axes: `${esc(item.axis.name)}（${esc(item.motor.ModelNo)}）`,
+      currents: `${fmt(item.demand.requiredMax, 1)} A 无可用规格`,
+      note: "需重新评估电机或补充驱动目录。"
+    }))
+  ];
+  return `
+    <div class="drive-plan">
+      <div class="block-title">
+        <h3>驱动配置建议</h3>
+        <span>多合一优先 · 单轴回退 · 30% 电流余量</span>
+      </div>
+      <div class="table-wrap">
+        <table class="matrix-table drive-plan-table">
+          <thead>
+            <tr>
+              <th>配置方式</th>
+              <th>驱动系列 / 电池款</th>
+              <th>驱动器型号 / 料号</th>
+              <th>使用轴模块</th>
+              <th>服务轴</th>
+              <th>需求 → 最大电流</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${entries.map((entry) => `
+              <tr>
+                <td><span class="tag ${entry.modeClass}">${entry.mode}</span></td>
+                <td>${esc(entry.series)}</td>
+                <td class="model">${esc(entry.model)}<small>${esc(entry.partNo)}</small></td>
+                <td>${entry.modules}</td>
+                <td>${entry.axes}</td>
+                <td class="num">${entry.currents}</td>
+                <td class="plan-note">${esc(entry.note)}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderAxisMatrix(plan) {
+  const rows = state.axes
+    .map((axis) => ({ axis, result: state.results[axis.id] }))
+    .filter((item) => item.result);
+  if (rows.length < 2) return "";
+  return `
+    <div class="matrix-card">
+      <div class="block-title">
+        <h3>全轴选型总览</h3>
+        <span>${rows.length} AXIS CALCULATED</span>
+      </div>
+      <div class="table-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>轴</th>
+              <th>推荐型号</th>
+              <th>功率</th>
+              <th>惯量比</th>
+              <th>静止余量</th>
+              <th>峰值扭矩</th>
+              <th>峰值电流</th>
+              <th>转速需求</th>
+              <th>驱动配置</th>
+              <th>结论</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(({ axis, result }) => {
+              const rec = result.recommended;
+              const driver = plan?.axisDrives?.[axis.id] || null;
+              return `
+                <tr>
+                  <td><button class="chip-btn" type="button" data-action="select-axis" data-axis-id="${axis.id}">${esc(axis.name)}</button></td>
+                  <td>${rec ? esc(rec.motor.ModelNo) : "—"}</td>
+                  <td>${rec ? `${fmt(rec.motor.Watt, 1)} kW` : "—"}</td>
+                  <td>${rec ? pct(rec.inertiaRatio) : "—"}</td>
+                  <td>${rec ? `${fmt(rec.staticMargin, 2)}×` : "—"}</td>
+                  <td>${rec ? `${fmt(rec.peakTorque, 1)} N·m` : "—"}</td>
+                  <td>${rec ? `${fmt(rec.peakCurrent, 1)} A` : "—"}</td>
+                  <td>${fmt(result.base.motorSpeed, 0)} rpm</td>
+                  <td>${driver
+                    ? `${esc(driver.ModelNo)}<br><small>${driveTypeText(driver)}${driver.SelectionType === "MultiAxis" ? ` · 模块 #${driver.ModuleIndex + 1}` : ""}</small>`
+                    : "—"}</td>
+                  <td><span class="tag ${result.status}">${statusText(result.status)}</span></td>
+                </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+      ${renderDrivePlan(plan)}
+    </div>`;
+}
+
 function renderResults() {
   const root = $("#resultRoot");
   if (!root) return;
@@ -3242,6 +3670,10 @@ function renderResults() {
       </section>`;
     return;
   }
+  const calculated = state.axes
+    .map((item) => ({ axis: item, result: state.results[item.id] }))
+    .filter((item) => item.result);
+  const drivePlan = buildDrivePlan(calculated);
 
   root.innerHTML = `
     <section class="section-card">
@@ -3255,7 +3687,7 @@ function renderResults() {
         ${statCard("抱闸要求", num(axis.theta) > 1 ? "必须" : "不需要", "", `倾角 ${fmt(num(axis.theta), 1)}°`)}
       </div>
       ${renderAlerts(result, axis)}
-      ${renderRecommendation(result, axis)}
+      ${renderRecommendation(result, axis, drivePlan)}
       <div class="action-bar" style="margin-top:0;padding-top:0;border-top:0">
         <div class="muted-text">状态：${statusText(result.status)} · 候选池 ${result.pool.length} 款 · 简易核心初选</div>
         <div class="action-group">
@@ -3268,7 +3700,7 @@ function renderResults() {
       ${renderCandidateTable(result, axis)}
       ${renderCompareStrip(result)}
       ${renderFormulaPanel(result)}
-      ${renderAxisMatrix()}
+      ${renderAxisMatrix(drivePlan)}
     </section>`;
 }
 
@@ -3355,6 +3787,7 @@ function exportCsv() {
     "推荐驱动", "驱动额定电流A", "驱动最大电流A",
     "结论", "未通过项"
   ];
+  header.splice(17, 0, "驱动方式", "驱动系列", "使用轴模块", "驱动器料号");
   const lines = [header.map(csvEscape).join(",")];
   calculated.forEach(({ axis, result }) => {
     result.candidates.forEach((candidate) => {
@@ -3377,6 +3810,12 @@ function exportCsv() {
         result.base.staticTorque.toFixed(3),
         candidate.staticLimit.toFixed(3),
         candidate.staticMargin.toFixed(3),
+        driveTypeText(candidate.drive),
+        candidate.drive?.DriveType || "",
+        candidate.drive?.SelectionType === "MultiAxis"
+          ? `#${candidate.drive.ModuleIndex + 1} ${fmt(candidate.drive.RatedCurrent, 1)}/${fmt(candidate.drive.MaxCurrent, 1)} A`
+          : candidate.drive?.DriveSize || "",
+        candidate.drive?.PartNo || "",
         candidate.drive?.ModelNo || "",
         candidate.drive?.RatedCurrent ?? "",
         candidate.drive?.MaxCurrent ?? "",
@@ -3625,7 +4064,10 @@ function runSelfTests() {
   assertClose("AM5-40-F3 peak torque N·m", zCandidate.peakTorque, 11.80, 0.1);
   assertClose("AM5-40-F3 peak current A", zCandidate.peakCurrent, 9.13, 0.1);
   assertTrue("core checks use exactly six criteria", zCandidate.failures.length === 0 && zCandidate.status === "pass");
-  assertTrue("F-series drive matching stays in SPD family", zCandidate.drive?.ModelNo === "SPD32F1-050");
+  assertTrue("Z drive preference uses a multi-axis SMH module",
+    zCandidate.drive?.SelectionType === "MultiAxis" &&
+    zCandidate.drive?.DriveType === "SMH" &&
+    zCandidate.drive?.ModelNo === "SMH-35/35-100-M");
 
   const v2Axis = {
     ...makeAxis("Z"),
@@ -3680,11 +4122,50 @@ function runSelfTests() {
   assertTrue("standard structure excludes K/SK/BK motors", standardPool.every((motor) => !motor.KeySlot));
   assertTrue("all structure includes keyed motors", allStructurePool.some((motor) => motor.KeySlot));
   assertTrue("all structure preserves all 68 F-series entries", fullCatalogPool.length === MOTORS.length && MOTORS.length === 68);
+  assertTrue("drive catalogs include full single-axis and multi-axis tables",
+    DRIVES.length === 17 && MULTI_DRIVES.length === 16);
+  const smh3535 = MULTI_DRIVES.find((drive) => drive.PartNo === "SMD33C35100-00");
+  assertTrue("SMH-35/35-100-M axis modules are 8.4 / 19.8 A",
+    smh3535?.AxisModules.length === 2 &&
+    smh3535.AxisModules.every((module) => module.RatedCurrent === 8.4 && module.MaxCurrent === 19.8));
 
   const am9520 = MOTORS.find((motor) => motor.ModelNo === "AM95-20-F1");
   const drive = findDrive(am9520, 22.72);
   assertClose("drive required max current includes 30% reserve", drive?.requiredMax ?? NaN, 135.95, 0.1);
-  assertTrue("drive match applies 30% max-current reserve", drive?.ModelNo === "SPD32B1-450" && drive?.designFactor === FIXED.driveCurrentReserve);
+  assertTrue("X falls back to a single-axis SPD after multi-axis current rejection",
+    drive?.ModelNo === "SPD32B1-450" &&
+    drive?.SelectionType === "SingleAxis" &&
+    drive?.designFactor === FIXED.driveCurrentReserve);
+  const drivePlan = buildDrivePlan([
+    { axis: xAxis, result: xResult },
+    { axis: yAxis, result: yResult },
+    { axis: zAxis, result: zResult }
+  ]);
+  assertTrue("X uses single-axis fallback",
+    drivePlan.axisDrives[xAxis.id]?.SelectionType === "SingleAxis" &&
+    drivePlan.axisDrives[xAxis.id]?.ModelNo === "SPD32B1-450");
+  assertTrue("Y uses single-axis fallback",
+    drivePlan.axisDrives[yAxis.id]?.SelectionType === "SingleAxis" &&
+    drivePlan.axisDrives[yAxis.id]?.ModelNo === "SPD32B1-450");
+  assertTrue("Z is assigned to a shared SMH unit",
+    drivePlan.axisDrives[zAxis.id]?.SelectionType === "MultiAxis" &&
+    drivePlan.axisDrives[zAxis.id]?.ModelNo === "SMH-35/35-100-M");
+  const assignedAxisIds = drivePlan.multiUnits
+    .flatMap((unit) => unit.assignments.map((assignment) => assignment.axis.id));
+  assertTrue("multi-axis modules are never allocated to the same axis twice",
+    new Set(assignedAxisIds).size === assignedAxisIds.length);
+  const sharedAxes = [
+    { ...makeAxis("Z"), id: "selftest_shared_1", name: "Shared 1" },
+    { ...makeAxis("Z"), id: "selftest_shared_2", name: "Shared 2" }
+  ];
+  const sharedPlan = buildDrivePlan(sharedAxes.map((axis) => ({
+    axis,
+    result: calculateAxis(axis)
+  })));
+  const sharedUnit = sharedPlan.multiUnits.find((unit) => unit.assignments.length === 2);
+  assertTrue("two compatible axes share one multi-axis unit on distinct modules",
+    Boolean(sharedUnit) &&
+    new Set(sharedUnit.assignments.map((assignment) => assignment.moduleIndex)).size === 2);
   assertTrue("new projects contain only core fields", defaultState().axes.every((axis) =>
     !["bore", "friction", "processForce", "preload", "extraInertia", "stroke", "dwell", "inertiaLimit", "peakSafety", "efficiency", "density"]
       .some((key) => Object.hasOwn(axis, key))));
@@ -3716,7 +4197,25 @@ function runSelfTests() {
   return passCount === results.length;
 }
 
+function enhanceDrivePolicySection() {
+  const card = $("#formulaModal .modal-card");
+  if (!card || card.querySelector(".drive-policy-section")) return;
+  const section = document.createElement("div");
+  section.className = "modal-section drive-policy-section";
+  section.innerHTML = `
+    <h3>驱动配置原则（选型手册 V3.14.0）</h3>
+    <ul>
+      <li><b>优先顺序：</b>先检查同电压等级的多合一驱动；只有多合一没有可用的独立轴模块时，才回退单轴驱动。</li>
+      <li><b>电流判据：</b>轴模块额定电流 ≥ 电机额定电流，轴模块最大电流 ≥ <code>max(电机最大电流, I_peak) / 0.7</code>。主轴模块不用于替代伺服轴模块。</li>
+      <li><b>模块分配：</b>按项目全部轴统一分配，每个多合一轴模块只能分配给一个轴，不会重复占用同一模块。</li>
+      <li><b>产品范围：</b>220 V 多合一为 SMD；380 V 多合一为 SMH；RMH 作为逆变多合一末选并要求配置电抗器。单轴回退优先 SVD，超过目录能力时使用 SPD。</li>
+      <li><b>电池款：</b>结果会明确标注“非锂电池”或“标配锂电池”；未在界面指定时，目录同时保留两种规格供工程确认。</li>
+    </ul>`;
+  card.appendChild(section);
+}
+
 function init() {
+  enhanceDrivePolicySection();
   const params = new URLSearchParams(window.location.search);
   const requestedAxis = String(params.get("axis") || "").toUpperCase();
   const matchedAxis = state.axes.find((axis) => String(axis.name || "").toUpperCase().startsWith(requestedAxis));
