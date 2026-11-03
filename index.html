@@ -1,0 +1,3760 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#16231e">
+  <title>CF2512 伺服选型工作台 v3</title>
+  <style>
+:root {
+  --paper: #f2efe6;
+  --paper-2: #e9e4d8;
+  --card: #fbfaf5;
+  --card-2: #f6f3eb;
+  --ink: #16231e;
+  --ink-2: #2f3d36;
+  --muted: #6c766f;
+  --line: #d5cfc1;
+  --line-strong: #b9b1a0;
+  --teal: #0d7168;
+  --teal-soft: #dcece6;
+  --orange: #ee5b2b;
+  --orange-soft: #fbe4d9;
+  --lime: #bed85e;
+  --good: #15705c;
+  --good-soft: #dcefe8;
+  --warn: #a9680d;
+  --warn-soft: #f7ead1;
+  --danger: #b83c2d;
+  --danger-soft: #f7dfd9;
+  --blue: #245d84;
+  --shadow: 0 18px 42px rgba(32, 42, 37, 0.08);
+  --font-display: "Bahnschrift SemiCondensed", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --font-body: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Cascadia Code", "Consolas", "SFMono-Regular", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 2%, rgba(238, 91, 43, 0.10), transparent 30rem),
+    radial-gradient(circle at 95% 15%, rgba(13, 113, 104, 0.12), transparent 34rem),
+    linear-gradient(rgba(22, 35, 30, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 35, 30, 0.035) 1px, transparent 1px),
+    var(--paper);
+  background-size: auto, auto, 24px 24px, 24px 24px, auto;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(13, 113, 104, 0.28);
+  outline-offset: 1px;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  min-height: 74px;
+  padding: 10px clamp(16px, 2.4vw, 34px);
+  color: #f8f5ec;
+  background: var(--ink);
+  border-bottom: 3px solid var(--orange);
+  box-shadow: 0 8px 28px rgba(13, 20, 17, 0.18);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  color: var(--ink);
+  background: var(--lime);
+  font: 800 17px/1 var(--font-display);
+  letter-spacing: 0.04em;
+  clip-path: polygon(0 0, 82% 0, 100% 20%, 100% 100%, 18% 100%, 0 80%);
+}
+
+.brand-mark::after {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 13px;
+  height: 13px;
+  background: var(--orange);
+  content: "";
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+.brand-copy h1 {
+  margin: 0;
+  font: 700 clamp(18px, 2vw, 25px)/1.08 var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.brand-copy p {
+  margin: 4px 0 0;
+  overflow: hidden;
+  color: rgba(248, 245, 236, 0.65);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.top-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.top-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 5px 10px;
+  color: rgba(248, 245, 236, 0.82);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font: 600 11px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.top-chip .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--lime);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(190, 216, 94, 0.12);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 272px minmax(0, 1fr);
+  gap: 0;
+  min-height: calc(100vh - 74px);
+}
+
+.rail {
+  position: sticky;
+  top: 74px;
+  align-self: start;
+  height: calc(100vh - 74px);
+  overflow: auto;
+  padding: 22px 16px 28px;
+  background: rgba(251, 250, 245, 0.74);
+  border-right: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+}
+
+.rail-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 4px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.rail-head h2 {
+  margin: 0;
+  font: 700 15px/1 var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rail-head span {
+  color: var(--muted);
+  font: 11px/1 var(--font-mono);
+}
+
+.axis-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.axis-btn {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 11px 10px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.axis-btn:hover {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: var(--line);
+  transform: translateX(2px);
+}
+
+.axis-btn.active {
+  background: var(--card);
+  border-color: var(--line-strong);
+  box-shadow: 0 8px 18px rgba(32, 42, 37, 0.07);
+}
+
+.axis-btn.active::before {
+  position: absolute;
+  width: 3px;
+  height: 34px;
+  margin-left: -11px;
+  background: var(--orange);
+  content: "";
+}
+
+.axis-index {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  font: 800 12px/1 var(--font-mono);
+}
+
+.axis-copy {
+  min-width: 0;
+}
+
+.axis-copy strong {
+  display: block;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.axis-copy small {
+  display: block;
+  overflow: hidden;
+  margin-top: 2px;
+  color: var(--muted);
+  font: 10px/1.25 var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.status-dot.pass {
+  background: var(--good);
+  box-shadow: 0 0 0 4px rgba(21, 112, 92, 0.12);
+}
+
+.status-dot.warn {
+  background: var(--warn);
+  box-shadow: 0 0 0 4px rgba(169, 104, 13, 0.12);
+}
+
+.status-dot.fail {
+  background: var(--danger);
+  box-shadow: 0 0 0 4px rgba(184, 60, 45, 0.12);
+}
+
+.rail-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.rail-actions .btn {
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 8px;
+  font-size: 11px;
+}
+
+.rail-note {
+  margin-top: 20px;
+  padding: 13px;
+  color: var(--muted);
+  background: rgba(22, 35, 30, 0.035);
+  border-left: 3px solid var(--teal);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.rail-note b {
+  color: var(--ink);
+}
+
+.main {
+  min-width: 0;
+  padding: 22px clamp(16px, 2.6vw, 36px) 54px;
+}
+
+.project-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: rgba(251, 250, 245, 0.8);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.mode-switch {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+}
+
+.mode-switch button {
+  min-height: 31px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: 600 11px/1 var(--font-body);
+  color: var(--muted);
+}
+
+.mode-switch button.active {
+  color: #fff;
+  background: var(--teal);
+}
+
+.section-card {
+  position: relative;
+  margin-bottom: 16px;
+  padding: clamp(16px, 2vw, 24px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  animation: rise-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.section-card::before {
+  position: absolute;
+  top: -1px;
+  left: 20px;
+  width: 56px;
+  height: 3px;
+  background: var(--orange);
+  content: "";
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.section-title-wrap {
+  min-width: 0;
+}
+
+.kicker {
+  margin-bottom: 5px;
+  color: var(--teal);
+  font: 700 10px/1.2 var(--font-mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin: 0;
+  font: 700 clamp(18px, 2vw, 23px)/1.18 var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.section-desc {
+  max-width: 760px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.section-help {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.field {
+  min-width: 0;
+}
+
+.field.span-2 {
+  grid-column: span 2;
+}
+
+.field.span-3 {
+  grid-column: span 3;
+}
+
+.field.span-4 {
+  grid-column: span 4;
+}
+
+.field label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 18px;
+  margin-bottom: 5px;
+  color: var(--ink-2);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.field label small {
+  color: var(--muted);
+  font: 10px/1 var(--font-mono);
+  font-weight: 400;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 39px;
+  padding: 8px 44px 8px 10px;
+  color: var(--ink);
+  background: #fffdf8;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.field select {
+  padding-right: 10px;
+  font-family: var(--font-body);
+}
+
+.field textarea {
+  min-height: 76px;
+  padding-right: 10px;
+  resize: vertical;
+}
+
+.field input:hover {
+  border-color: #938a78;
+}
+
+.field input:focus {
+  background: #fff;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(13, 113, 104, 0.10);
+  outline: 0;
+}
+
+.field input.invalid {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+
+.unit {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font: 10px/1 var(--font-mono);
+  pointer-events: none;
+}
+
+.field-help {
+  display: block;
+  min-height: 16px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.field-help.error {
+  color: var(--danger);
+}
+
+.orientation-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 7px;
+}
+
+.chip-btn {
+  padding: 5px 9px;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 10.5px;
+}
+
+.chip-btn:hover,
+.chip-btn.active {
+  color: var(--teal);
+  background: var(--teal-soft);
+  border-color: rgba(13, 113, 104, 0.35);
+}
+
+.advanced {
+  margin-top: 16px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+
+.advanced summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 13px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.advanced summary > span:first-child {
+  flex: 0 0 auto;
+}
+
+.summary-values {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  color: var(--muted);
+  font: 400 10px/1.3 var(--font-mono);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.advanced summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced summary::after {
+  color: var(--teal);
+  content: "+";
+  font: 700 18px/1 var(--font-mono);
+}
+
+.advanced[open] summary::after {
+  content: "−";
+}
+
+.advanced-body {
+  padding: 0 13px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.advanced-body .field-grid {
+  margin-top: 13px;
+}
+
+.form-mode-note {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  color: var(--ink-2);
+  background: var(--teal-soft);
+  border-left: 3px solid var(--teal);
+  font-size: 11px;
+}
+
+.form-mode-note strong {
+  flex: 0 0 auto;
+  color: var(--teal);
+}
+
+.form-mode-note.pro {
+  background: var(--orange-soft);
+  border-left-color: var(--orange);
+}
+
+.form-mode-note.pro strong {
+  color: var(--orange);
+}
+
+.assumption-strip {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--card-2);
+  border: 1px dashed var(--line-strong);
+}
+
+.assumption-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.assumption-head strong {
+  font-size: 12px;
+}
+
+.assumption-head span {
+  color: var(--muted);
+  font-size: 10.5px;
+  text-align: right;
+}
+
+.assumption-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
+.assumption-tags span {
+  padding: 4px 7px;
+  color: var(--ink-2);
+  background: var(--card);
+  border: 1px solid var(--line);
+  font: 10px/1.2 var(--font-mono);
+}
+
+.assumption-warning {
+  margin-top: 9px;
+  padding: 8px 10px;
+  color: var(--warn);
+  background: var(--warn-soft);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.assumption-strip .action-group {
+  margin-top: 10px;
+}
+
+.assumption-strip .btn {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 10.5px;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 14px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(32, 42, 37, 0.10);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.primary {
+  color: #fff;
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.btn.accent {
+  color: var(--ink);
+  background: var(--lime);
+  border-color: #a9c641;
+}
+
+.btn.dark {
+  color: #fff;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.btn.danger {
+  color: var(--danger);
+  border-color: rgba(184, 60, 45, 0.35);
+}
+
+.btn .icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  margin-bottom: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgba(13, 113, 104, 0.05), transparent 40%),
+    var(--card);
+  border: 1px dashed var(--line-strong);
+}
+
+.empty-state-mark {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 15px;
+  color: var(--teal);
+  background: var(--teal-soft);
+  border: 1px solid rgba(13, 113, 104, 0.22);
+  font: 800 22px/1 var(--font-display);
+  clip-path: polygon(0 0, 82% 0, 100% 18%, 100% 100%, 18% 100%, 0 82%);
+}
+
+.empty-state h3 {
+  margin: 0;
+  font: 700 20px/1.2 var(--font-display);
+}
+
+.empty-state p {
+  max-width: 520px;
+  margin: 7px auto 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.result-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.result-heading {
+  min-width: 0;
+}
+
+.result-heading h2 {
+  margin: 0;
+  font: 700 clamp(22px, 2.8vw, 31px)/1.12 var(--font-display);
+}
+
+.result-heading p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid;
+  font: 700 11px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-pill.pass {
+  color: var(--good);
+  background: var(--good-soft);
+  border-color: rgba(21, 112, 92, 0.3);
+}
+
+.status-pill.warn {
+  color: var(--warn);
+  background: var(--warn-soft);
+  border-color: rgba(169, 104, 13, 0.3);
+}
+
+.status-pill.fail {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: rgba(184, 60, 45, 0.3);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  position: relative;
+  min-width: 0;
+  padding: 12px 12px 11px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.stat-card::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, transparent 50%, rgba(22, 35, 30, 0.08) 50%);
+  content: "";
+}
+
+.stat-label {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-value {
+  margin-top: 4px;
+  font: 750 clamp(18px, 2vw, 25px)/1 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.stat-value small {
+  color: var(--muted);
+  font: 10px/1 var(--font-mono);
+}
+
+.stat-note {
+  margin-top: 4px;
+  color: var(--muted);
+  font: 9px/1.3 var(--font-mono);
+}
+
+.recommend-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.3fr) minmax(260px, 2fr) minmax(190px, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background:
+    linear-gradient(115deg, rgba(190, 216, 94, 0.20), transparent 38%),
+    var(--ink);
+  color: #f8f5ec;
+  border: 1px solid #0d1713;
+}
+
+.recommend-label {
+  color: rgba(248, 245, 236, 0.58);
+  font: 10px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.motor-name {
+  margin: 7px 0 3px;
+  color: #fff;
+  font: 750 clamp(24px, 3vw, 38px)/1.05 var(--font-display);
+  letter-spacing: -0.02em;
+  word-break: break-all;
+}
+
+.motor-sub {
+  color: var(--lime);
+  font: 600 11px/1.4 var(--font-mono);
+}
+
+.recommend-reason {
+  margin: 7px 0 0;
+  color: rgba(248, 245, 236, 0.68);
+  font-size: 11px;
+}
+
+.recommend-specs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  align-self: center;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.recommend-spec {
+  padding: 9px 10px;
+  background: rgba(22, 35, 30, 0.72);
+}
+
+.recommend-spec span {
+  display: block;
+  color: rgba(248, 245, 236, 0.52);
+  font-size: 9px;
+}
+
+.recommend-spec strong {
+  display: block;
+  margin-top: 3px;
+  color: #fff;
+  font: 650 14px/1.1 var(--font-mono);
+}
+
+.recommend-driver {
+  align-self: center;
+  padding-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.recommend-driver .driver-name {
+  margin-top: 7px;
+  color: #fff;
+  font: 700 19px/1.1 var(--font-display);
+}
+
+.recommend-driver p {
+  margin: 5px 0 0;
+  color: rgba(248, 245, 236, 0.6);
+  font-size: 10px;
+}
+
+.alert-stack {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 15px;
+}
+
+.alert {
+  display: flex;
+  gap: 9px;
+  padding: 9px 11px;
+  border-left: 3px solid;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.alert.info {
+  color: #234d48;
+  background: var(--teal-soft);
+  border-color: var(--teal);
+}
+
+.alert.warn {
+  color: #70460d;
+  background: var(--warn-soft);
+  border-color: var(--warn);
+}
+
+.alert.danger {
+  color: #743126;
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+
+.alert .alert-icon {
+  flex: 0 0 auto;
+  font: 800 12px/1.5 var(--font-mono);
+}
+
+.block-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 4px 0 8px;
+}
+
+.block-title h3 {
+  margin: 0;
+  font: 700 15px/1.2 var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.block-title span {
+  color: var(--muted);
+  font: 10px/1 var(--font-mono);
+}
+
+.table-wrap {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--line);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 1050px;
+  border-collapse: collapse;
+  background: var(--card);
+  font-size: 11px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px 9px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid rgba(213, 207, 193, 0.62);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  color: var(--ink-2);
+  background: #e9e4d7;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.data-table tbody tr:hover {
+  background: #f6f7ed;
+}
+
+.data-table tr.recommended {
+  background: rgba(190, 216, 94, 0.18);
+}
+
+.data-table tr.recommended td:first-child {
+  box-shadow: inset 3px 0 var(--lime);
+}
+
+.data-table tr.failed {
+  color: #686d69;
+  background: rgba(184, 60, 45, 0.035);
+}
+
+.data-table td.model {
+  text-align: left;
+}
+
+.data-table td.model strong {
+  display: block;
+  color: var(--ink);
+  font: 700 11.5px/1.2 var(--font-mono);
+}
+
+.data-table td.model small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.data-table .num {
+  font-family: var(--font-mono);
+}
+
+.tag {
+  display: inline-block;
+  margin: 1px 2px;
+  padding: 2px 5px;
+  color: var(--ink-2);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font: 600 8.5px/1.25 var(--font-mono);
+  white-space: nowrap;
+}
+
+.tag.brake {
+  color: #6e4b0b;
+  background: var(--warn-soft);
+  border-color: rgba(169, 104, 13, 0.22);
+}
+
+.tag.key {
+  color: #3e5666;
+  background: #e3edf2;
+  border-color: rgba(36, 93, 132, 0.18);
+}
+
+.tag.pass {
+  color: var(--good);
+  background: var(--good-soft);
+  border-color: rgba(21, 112, 92, 0.22);
+}
+
+.tag.warn {
+  color: var(--warn);
+  background: var(--warn-soft);
+  border-color: rgba(169, 104, 13, 0.22);
+}
+
+.tag.fail {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: rgba(184, 60, 45, 0.22);
+}
+
+.ok-text {
+  color: var(--good);
+  font-weight: 700;
+}
+
+.warn-text {
+  color: var(--warn);
+  font-weight: 700;
+}
+
+.fail-text {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.muted-text {
+  color: var(--muted);
+}
+
+.mini-progress {
+  position: relative;
+  width: 70px;
+  height: 5px;
+  margin: 3px auto 0;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.mini-progress i {
+  display: block;
+  height: 100%;
+  background: var(--teal);
+}
+
+.mini-progress i.warn {
+  background: var(--warn);
+}
+
+.mini-progress i.fail {
+  background: var(--danger);
+}
+
+.compare-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.compare-card {
+  padding: 11px 12px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+
+.compare-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.compare-card strong {
+  display: block;
+  margin-top: 4px;
+  font: 700 16px/1.1 var(--font-display);
+}
+
+.compare-card small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9.5px;
+}
+
+.formula-panel {
+  margin-top: 14px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+}
+
+.formula-panel summary {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.formula-body {
+  padding: 0 12px 12px;
+  border-top: 1px solid var(--line);
+  font: 10.5px/1.8 var(--font-mono);
+}
+
+.formula-row {
+  display: grid;
+  grid-template-columns: minmax(210px, 0.8fr) minmax(260px, 1.4fr) minmax(110px, auto);
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.formula-row:last-child {
+  border-bottom: 0;
+}
+
+.formula-row strong {
+  font-weight: 700;
+}
+
+.formula-row code {
+  color: #34443d;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.formula-row em {
+  color: var(--teal);
+  font-style: normal;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.matrix-card {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+
+.matrix-card h3 {
+  margin: 0 0 10px;
+  font: 700 15px/1.2 var(--font-display);
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  font-size: 11px;
+}
+
+.matrix-table th,
+.matrix-table td {
+  padding: 8px 9px;
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.matrix-table th {
+  background: #e9e4d7;
+  font-size: 9.5px;
+}
+
+.matrix-table td:first-child,
+.matrix-table th:first-child {
+  text-align: left;
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 80;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 11px 14px;
+  color: #fff;
+  background: var(--ink);
+  border-left: 4px solid var(--lime);
+  box-shadow: 0 16px 32px rgba(13, 20, 17, 0.25);
+  font-size: 12px;
+  transform: translateY(18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.error {
+  border-color: var(--danger);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(13, 20, 17, 0.64);
+  backdrop-filter: blur(5px);
+}
+
+.modal.open {
+  display: grid;
+}
+
+.modal-card {
+  width: min(850px, 100%);
+  max-height: min(78vh, 850px);
+  overflow: auto;
+  padding: 22px;
+  background: var(--card);
+  border-top: 4px solid var(--orange);
+  box-shadow: 0 30px 80px rgba(13, 20, 17, 0.36);
+}
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.modal-head h2 {
+  margin: 0;
+  font: 700 25px/1.15 var(--font-display);
+}
+
+.modal-head p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  font: 800 18px/1 var(--font-mono);
+}
+
+.modal-section {
+  margin-top: 18px;
+}
+
+.modal-section h3 {
+  margin: 0 0 7px;
+  font: 700 14px/1.2 var(--font-display);
+}
+
+.modal-section p,
+.modal-section li {
+  color: var(--ink-2);
+  font-size: 11.5px;
+}
+
+.modal-section ul {
+  margin: 0;
+  padding-left: 19px;
+}
+
+.modal-code {
+  padding: 10px 12px;
+  overflow: auto;
+  background: #17231e;
+  color: #dce8df;
+  font: 10.5px/1.7 var(--font-mono);
+  white-space: pre-wrap;
+}
+
+.guide-card {
+  width: min(980px, 100%);
+}
+
+.guide-tier {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.guide-tier-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.guide-tier-head > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  color: var(--teal);
+  background: var(--teal-soft);
+  border: 1px solid rgba(13, 113, 104, 0.28);
+  font: 800 11px/1 var(--font-mono);
+}
+
+.guide-tier-head h3 {
+  margin: 0;
+  font: 700 15px/1.2 var(--font-display);
+}
+
+.guide-tier-head p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.guide-item {
+  padding: 9px 10px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+}
+
+.guide-item strong {
+  display: block;
+  font-size: 11.5px;
+}
+
+.guide-item p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.guide-source {
+  color: var(--warn);
+}
+
+.guide-source .guide-tier-head > span {
+  color: var(--warn);
+  background: var(--warn-soft);
+  border-color: rgba(169, 104, 13, 0.3);
+}
+
+.guide-note {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  background: var(--warn-soft);
+  font-size: 11px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes row-reveal {
+  from {
+    transform: translateY(5px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.data-table tbody tr {
+  animation: row-reveal 240ms ease both;
+}
+
+.data-table tbody tr:nth-child(2) { animation-delay: 22ms; }
+.data-table tbody tr:nth-child(3) { animation-delay: 44ms; }
+.data-table tbody tr:nth-child(4) { animation-delay: 66ms; }
+.data-table tbody tr:nth-child(5) { animation-delay: 88ms; }
+.data-table tbody tr:nth-child(6) { animation-delay: 110ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 1260px) {
+  .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .recommend-card {
+    grid-template-columns: minmax(210px, 1.2fr) minmax(250px, 1.8fr);
+  }
+
+  .recommend-driver {
+    grid-column: span 2;
+    padding: 10px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 1020px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .rail {
+    position: sticky;
+    top: 74px;
+    z-index: 20;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    padding: 10px 14px;
+    overflow-x: hidden;
+    overflow-y: visible;
+    background: rgba(242, 239, 230, 0.96);
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(18px);
+  }
+
+  .rail-head,
+  .rail-note {
+    display: none;
+  }
+
+  .axis-list {
+    display: flex;
+    gap: 7px;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .axis-btn {
+    grid-template-columns: 28px minmax(88px, auto) auto;
+    width: auto;
+    min-width: 152px;
+    padding: 7px 9px;
+    background: rgba(251, 250, 245, 0.65);
+    border-color: var(--line);
+  }
+
+  .axis-btn.active::before {
+    display: none;
+  }
+
+  .axis-btn.active {
+    box-shadow: inset 0 -3px var(--orange);
+  }
+
+  .axis-index {
+    width: 27px;
+    height: 27px;
+    font-size: 10px;
+  }
+
+  .rail-actions {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+    margin-top: 8px;
+    overflow-x: auto;
+  }
+
+  .rail-actions .btn {
+    flex: 0 0 auto;
+  }
+
+  .main {
+    width: 100%;
+    min-width: 0;
+    padding-top: 16px;
+  }
+
+  .project-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    min-height: 66px;
+    padding: 9px 14px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .brand-copy h1 {
+    font-size: 18px;
+  }
+
+  .brand-copy p {
+    max-width: 180px;
+    font-size: 9px;
+  }
+
+  .top-chip:nth-child(2),
+  .top-chip:nth-child(3) {
+    display: none;
+  }
+
+  .layout {
+    min-height: calc(100vh - 66px);
+  }
+
+  .rail {
+    top: 66px;
+  }
+
+  .project-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-values {
+    display: none;
+  }
+
+  .assumption-head {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .assumption-head span {
+    text-align: left;
+  }
+
+  .guide-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .field.span-3,
+  .field.span-4 {
+    grid-column: span 2;
+  }
+
+  .section-head {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-bar,
+  .action-group {
+    align-items: stretch;
+  }
+
+  .action-group {
+    width: 100%;
+  }
+
+  .action-group .btn {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recommend-card {
+    grid-template-columns: 1fr;
+  }
+
+  .recommend-specs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recommend-driver {
+    grid-column: auto;
+  }
+
+  .compare-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .formula-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .formula-row em {
+    text-align: left;
+  }
+}
+
+@media (max-width: 470px) {
+  .topbar {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brand-copy h1 {
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .top-chip {
+    min-height: 28px;
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-mode-note {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .field.span-2,
+  .field.span-3,
+  .field.span-4 {
+    grid-column: span 1;
+  }
+
+  .brand-copy p {
+    display: none;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  body {
+    background: #fff;
+    font-size: 9pt;
+  }
+
+  .topbar {
+    position: static;
+    color: #000;
+    background: #fff;
+    border-bottom: 2px solid #000;
+    box-shadow: none;
+  }
+
+  .top-status,
+  .rail,
+  .project-strip,
+  .action-bar,
+  .mode-switch,
+  .toast,
+  .modal,
+  .btn {
+    display: none !important;
+  }
+
+  .layout {
+    display: block;
+    min-height: 0;
+  }
+
+  .main {
+    padding: 0;
+  }
+
+  .section-card,
+  .matrix-card {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .recommend-card {
+    color: #000;
+    background: #fff;
+    border: 1px solid #000;
+  }
+
+  .motor-name,
+  .motor-sub,
+  .recommend-driver .driver-name {
+    color: #000;
+  }
+
+  .recommend-label,
+  .recommend-reason,
+  .recommend-driver p {
+    color: #444;
+  }
+
+  .recommend-spec {
+    background: #fff;
+  }
+
+  .recommend-spec span {
+    color: #555;
+  }
+
+  .recommend-spec strong {
+    color: #000;
+  }
+
+  .recommend-specs {
+    background: #000;
+  }
+
+  .data-table {
+    font-size: 7.5pt;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 4px 5px;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  .data-table {
+    min-width: 0;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CF</div>
+        <div class="brand-copy">
+          <h1>CF2512 伺服选型工作台</h1>
+          <p>Syntec F-Series · Ballscrew Axis Sizing · Offline Workbench</p>
+        </div>
+      </div>
+      <div class="top-status" aria-label="系统状态">
+        <span class="top-chip"><i class="dot"></i>LOCAL / OFFLINE</span>
+        <span class="top-chip">F-SERIES · 68 MOTORS</span>
+        <span class="top-chip" id="buildStamp">BUILD 2026-11-03 20:19</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="rail" aria-label="轴列表与项目操作">
+        <div class="rail-head">
+          <h2>Axes / 轴列表</h2>
+          <span id="axisCount">03</span>
+        </div>
+        <div class="axis-list" id="axisList"></div>
+        <div class="rail-actions">
+          <button class="btn ghost" type="button" data-action="add-axis">＋ 新增轴</button>
+          <button class="btn ghost" type="button" data-action="duplicate-axis">复制当前轴</button>
+          <button class="btn ghost" type="button" data-action="save-project">保存项目</button>
+          <button class="btn ghost" type="button" data-action="load-project">导入项目</button>
+        </div>
+        <div class="rail-note">
+          <b>工作口径</b><br>
+          仅使用简易填参：负载质量、减速比、丝杆导程/外径/长度、最高速度、加速度和姿态倾角。摩擦按原厂 v2 固定 μ=0.10；内孔、工艺力、预紧、行程和 RMS 不作为输入。<br><br>
+          <b>数据范围</b><br>
+          仅新代 F 系列 68 款；驱动器为单轴 380V 电流匹配参考，不替代正式驱动选型。
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="project-strip" aria-label="项目信息">
+          <div class="field">
+            <label for="projectName">项目名称 <small>PROJECT</small></label>
+            <div class="input-wrap">
+              <input id="projectName" data-project="name" type="text" maxlength="80" autocomplete="off">
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="configSection" aria-labelledby="configTitle">
+          <div class="section-head">
+            <div class="section-title-wrap">
+              <div class="kicker">01 / Mechanism &amp; Motion</div>
+              <h2 class="section-title" id="configTitle">轴参数</h2>
+              <p class="section-desc" id="modeDescription"></p>
+            </div>
+            <div class="action-group">
+              <button class="btn ghost" type="button" data-action="delete-axis">删除当前轴</button>
+            </div>
+          </div>
+          <div id="formRoot"></div>
+        </section>
+
+        <section id="resultRoot" aria-live="polite"></section>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal" id="formulaModal" role="dialog" aria-modal="true" aria-labelledby="formulaModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h2 id="formulaModalTitle">简易核心初选与判定原则</h2>
+          <p>界面只保留 8 个核心参数。所有未输入项不再读取旧项目预设，而是明确按零处理；固定标准常量只用于公式换算。</p>
+        </div>
+        <button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-section">
+        <h3>唯一使用的输入</h3>
+        <p>负载质量 M、减速比 i、丝杆导程 P、丝杆外径 D、丝杆长度 L、最高速度 V、加速度 a、姿态倾角 θ。</p>
+      </div>
+      <div class="modal-section">
+        <h3>固定标准常量</h3>
+        <p>按原厂 v2 口径：钢制丝杆密度 ρ = 7874 kg/m³；滚珠丝杆效率 η = 0.90；重力加速度 g = 10 m/s²；导轨摩擦 μ = 0.10；峰值安全系数 K = 1 / 0.9 = 1.111；惯量比合格线 λmax = 300%；静止扭矩安全系数 Kstatic = 3；驱动器电流设计系数 Kdrive = 0.7。</p>
+        <p>内孔 d、工艺力 Fprocess、预紧 Tpreload、附加惯量 Jextra 按零处理；姿态角按原厂代码口径使用 θ/2π。</p>
+      </div>
+      <div class="modal-section">
+        <h3>计算过程</h3>
+        <div class="modal-code">J_bs = π·ρ·L·D⁴ / 32
+J_load = (J_bs + M·P²/(2π)²) / i²
+V_motor = V_table · i / P
+θ_calc = θ_deg / 2π
+F = M·g·[sin(θ_calc) + μ·cos(θ_calc)]
+T_load = F·P / (2π·η·i)
+α_motor = 2π·a_table·i / P
+T_peak,motor = [T_load + (J_load/η + J_motor)·α_motor] · K_safety
+I_req,drive = max(I_motor,max, I_peak) / K_drive
+λ_motor = J_load / J_motor × 100%</div>
+      </div>
+      <div class="modal-section">
+        <h3>六项通过判据</h3>
+        <ul>
+          <li><b>惯量比：</b>J_load / J_motor × 100% &lt; 300%。</li>
+          <li><b>静止扭矩：</b>静止扭矩需求 T_static &lt; 电机额定扭矩 / 3，等价于静止扭矩余量 &gt; 3×。</li>
+          <li><b>峰值扭矩：</b>T_peak,motor ≤ 电机最大扭矩。</li>
+          <li><b>最高转速：</b>V_table × i / P ≤ 电机最高转速。</li>
+          <li><b>峰值电流：</b>I_peak = T_peak / 额定扭矩 × 额定电流，且 I_peak ≤ 电机最大电流。</li>
+          <li><b>驱动器电流：</b>I_req = max(电机最大电流, I_peak) / 0.7；驱动器最大电流 ≥ I_req，且驱动器额定电流 ≥ 电机额定电流。</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h3>候选池与优先顺序</h3>
+        <ul>
+          <li>倾角大于 1°：只选带抱闸电机；水平轴：排除带抱闸电机。</li>
+          <li>默认排除 K / SK / BK 键槽或特殊轴伸结构。</li>
+          <li>六项全部通过的型号中，先按额定功率从小到大，再按最大扭矩从小到大排序。</li>
+          <li>驱动器只匹配 SPD 单轴系列：额定电流不低于电机额定电流，最大电流不低于“电机最大电流与峰值电流需求中的较大值 ÷ 0.7”。</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h3>静态余量、RMS 与驱动器口径</h3>
+        <ul>
+          <li><b>静态扭矩余量：</b>不再只作参考值，已纳入基础校核硬性淘汰；要求额定扭矩 ÷ 静止扭矩需求 &gt; 3。</li>
+          <li><b>RMS：</b>当前简易版没有有效行程和停留时间，因此不计算 RMS，也不参与淘汰；存在连续运行或高节拍要求时必须另行校核。</li>
+          <li><b>驱动器：</b>不再按实际峰值电流刚好匹配；必须以“电机最大电流与 I_peak 的较大值”为需求，再除以 0.7，预留约 30% 电流余量后参与淘汰。</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h3>结果边界</h3>
+        <p>该结果只回答“核心参数下是否能找到最小合格 F 系列电机”。导轨摩擦仅按原厂 v2 固定 μ=0.10 近似；若实际润滑状态、切削力、预紧、联轴器惯量、短行程高节拍、热变形、共振或驱动过载显著偏离该假设，必须另行复核，不能直接用本结果冻结型号。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="guideModal" role="dialog" aria-modal="true" aria-labelledby="guideModalTitle">
+    <div class="modal-card guide-card">
+      <div class="modal-head">
+        <div>
+          <h2 id="guideModalTitle">简易填参说明</h2>
+          <p>只填写机械图纸能够确认的 8 个核心参数。未列出的参数不会参与本次计算。</p>
+        </div>
+        <button class="icon-button" type="button" data-action="close-guide" aria-label="关闭">×</button>
+      </div>
+
+      <section class="guide-tier">
+        <div class="guide-tier-head">
+          <span>01</span>
+          <div>
+            <h3>核心 8 参数</h3>
+            <p>这些参数直接决定候选池、转速、惯量和峰值扭矩。</p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <div class="guide-item"><strong>负载质量</strong><p>工作台、工件、夹具和随动附件总质量。</p></div>
+          <div class="guide-item"><strong>减速比 i</strong><p>电机转 i 圈，丝杆转 1 圈时填 i；直连填 1。</p></div>
+          <div class="guide-item"><strong>丝杆导程 Pb</strong><p>丝杆每转一圈的直线位移。</p></div>
+          <div class="guide-item"><strong>丝杆外径 D</strong><p>按丝杆外径，不是轴承或螺母外径。</p></div>
+          <div class="guide-item"><strong>丝杆总长度 L</strong><p>参与丝杆自身惯量计算。</p></div>
+          <div class="guide-item"><strong>最高速度</strong><p>设备指令的床台最高速度，不是电机额定转速。</p></div>
+          <div class="guide-item"><strong>加速度</strong><p>以 G 为单位；按原厂 v2 口径，1 G = 10 m/s²。</p></div>
+          <div class="guide-item"><strong>姿态倾角 θ</strong><p>水平为 0°，重力轴为 90°，中间值按倾斜轴处理。</p></div>
+        </div>
+      </section>
+
+      <section class="guide-tier guide-source">
+        <div class="guide-tier-head">
+          <span>!</span>
+          <div>
+            <h3>输入项与内置判据分开</h3>
+            <p>内孔、有效行程、工艺力、预紧、附加惯量、停留时间、RMS 和增强校核不再作为输入项读取；导轨摩擦按原厂 v2 固定 μ=0.10。静止扭矩余量和驱动器 30% 电流余量保留为基础校核淘汰判据。</p>
+          </div>
+        </div>
+        <p class="guide-note">计算采用原厂 v2 口径：g=10、μ=0.10、θ_calc=θ/2π。静止扭矩按“额定扭矩 / 静止需求 &gt; 3”淘汰；驱动器按“需求电流 / 0.7”预留约 30% 后淘汰。该工具仍只适合核心参数初选，有具体切削、预紧或连续运行要求时必须另行复核。</p>
+      </section>
+    </div>
+  </div>
+
+  <input type="file" id="projectFile" class="hidden" accept=".json,application/json">
+
+  <script>
+const MOTORS = [{"PartNo":"S08-AM11-30B-F4","ModelNo":"AM11-30B-F4","Watt":2.4,"Voltage":380.0,"RatedCurrent":5.7,"MaxCurrent":17.1,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40B-F3","ModelNo":"AM11-40B-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40BK-F3","ModelNo":"AM11-40BK-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":28.9,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":213.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM11-40-F3","ModelNo":"AM11-40-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":26.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":185.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM11-40K-F3","ModelNo":"AM11-40K-F3","Watt":2.4,"Voltage":380.0,"RatedCurrent":8.27,"MaxCurrent":24.81,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":11.5,"MaxTorque":34.0,"RotorInertia":26.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":185.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM11-50K-F1","ModelNo":"AM11-50K-F1","Watt":2.3,"Voltage":380.0,"RatedCurrent":7.6,"MaxCurrent":31.0916,"RatedSpeed":2000.0,"MaxSpeed":5000.0,"RatedTorque":11.0,"MaxTorque":45.0,"RotorInertia":31.6,"EncoderBit":18.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":24.0,"Length":203.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-40B-F3","ModelNo":"AM15-40B-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":35.5,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":235.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM15-40BK-F3","ModelNo":"AM15-40BK-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":35.5,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":235.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-40-F3","ModelNo":"AM15-40-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":32.8,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":207.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM15-40K-F3","ModelNo":"AM15-40K-F3","Watt":3.1,"Voltage":380.0,"RatedCurrent":9.2,"MaxCurrent":27.6,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":32.8,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":24.0,"Length":207.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM15-60SK-F1","ModelNo":"AM15-60SK-F1","Watt":3.1,"Voltage":380.0,"RatedCurrent":10.7,"MaxCurrent":36.9899,"RatedSpeed":2000.0,"MaxSpeed":6000.0,"RatedTorque":15.0,"MaxTorque":45.0,"RotorInertia":31.6,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":24.0,"Length":220.0,"Brake":false,"KeySlot":true,"OilSeal":true},{"PartNo":"S08-AM1-60B-F2","ModelNo":"AM1-60B-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.636,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":123.6,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM1-60BK-F2","ModelNo":"AM1-60BK-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.636,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":123.6,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM1-60-F2","ModelNo":"AM1-60-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.559,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":94.9,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM1-60K-F2","ModelNo":"AM1-60K-F2","Watt":0.4,"Voltage":380.0,"RatedCurrent":2.4,"MaxCurrent":7.5,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":1.27,"MaxTorque":3.95,"RotorInertia":0.559,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":60.0,"ShaftDiameter":14.0,"Length":94.9,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM18-30B-F4","ModelNo":"AM18-30B-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":9.7,"MaxCurrent":29.1,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":18.6,"MaxTorque":45.3,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40B-F4","ModelNo":"AM18-40B-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40BK-F4","ModelNo":"AM18-40BK-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":51.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":215.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM18-40-F4","ModelNo":"AM18-40-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":46.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":167.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM18-40K-F4","ModelNo":"AM18-40K-F4","Watt":3.9,"Voltage":380.0,"RatedCurrent":11.0,"MaxCurrent":33.0,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":18.6,"MaxTorque":48.5,"RotorInertia":46.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":167.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM2-60B-F2","ModelNo":"AM2-60B-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":2.59,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":131.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM2-60BK-F2","ModelNo":"AM2-60BK-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":2.59,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":131.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM2-60-F2","ModelNo":"AM2-60-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":1.64,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":96.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM2-60K-F2","ModelNo":"AM2-60K-F2","Watt":0.75,"Voltage":380.0,"RatedCurrent":4.08,"MaxCurrent":15.72024,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":2.39,"MaxTorque":7.25,"RotorInertia":1.64,"EncoderBit":24.0,"MotorSupplier":"F2","FrameSize":80.0,"ShaftDiameter":19.0,"Length":96.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM28-30B-F4","ModelNo":"AM28-30B-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":74.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":242.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM28-30BK-F4","ModelNo":"AM28-30BK-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":74.8,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":242.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM28-30-F4","ModelNo":"AM28-30-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":69.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":194.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM28-30K-F4","ModelNo":"AM28-30K-F4","Watt":5.9,"Voltage":380.0,"RatedCurrent":13.6,"MaxCurrent":40.8,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":28.4,"MaxTorque":76.0,"RotorInertia":69.0,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":180.0,"ShaftDiameter":35.0,"Length":194.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-20B-F5","ModelNo":"AM35-20B-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-20BK-F5","ModelNo":"AM35-20BK-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-20-F5","ModelNo":"AM35-20-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-20K-F5","ModelNo":"AM35-20K-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-30B-F5","ModelNo":"AM35-30B-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-30BK-F5","ModelNo":"AM35-30BK-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":108.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":283.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM35-30-F5","ModelNo":"AM35-30-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM35-30K-F5","ModelNo":"AM35-30K-F5","Watt":5.5,"Voltage":380.0,"RatedCurrent":11.9,"MaxCurrent":35.7,"RatedSpeed":1500.0,"MaxSpeed":3000.0,"RatedTorque":35.0,"MaxTorque":91.4,"RotorInertia":90.5,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":220.5,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM3-60B-F4","ModelNo":"AM3-60B-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.85,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":182.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM3-60BK-F4","ModelNo":"AM3-60BK-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.85,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":182.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM3-60-F4","ModelNo":"AM3-60-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.5,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":141.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM3-60K-F4","ModelNo":"AM3-60K-F4","Watt":1.0,"Voltage":380.0,"RatedCurrent":4.25,"MaxCurrent":12.75,"RatedSpeed":3000.0,"MaxSpeed":6000.0,"RatedTorque":3.2,"MaxTorque":10.0,"RotorInertia":3.5,"EncoderBit":24.0,"MotorSupplier":"F4","FrameSize":90.0,"ShaftDiameter":19.0,"Length":141.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-20B-F5","ModelNo":"AM48-20B-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":140.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":335.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-20BK-F5","ModelNo":"AM48-20BK-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":140.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":335.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-20-F5","ModelNo":"AM48-20-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":125.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":272.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-20K-F5","ModelNo":"AM48-20K-F5","Watt":7.5,"Voltage":380.0,"RatedCurrent":16.5,"MaxCurrent":49.5,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":48.0,"MaxTorque":120.9,"RotorInertia":125.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":272.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-30B-F5","ModelNo":"AM48-30B-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":235.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":373.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-30BK-F5","ModelNo":"AM48-30BK-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":235.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":373.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM48-30-F5","ModelNo":"AM48-30-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":220.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":312.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM48-30K-F5","ModelNo":"AM48-30K-F5","Watt":10.0,"Voltage":380.0,"RatedCurrent":19.3,"MaxCurrent":61.9144,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":48.0,"MaxTorque":130.0,"RotorInertia":220.0,"EncoderBit":24.0,"MotorSupplier":"F5","FrameSize":180.0,"ShaftDiameter":35.0,"Length":312.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM5-40B-F3","ModelNo":"AM5-40B-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":16.0,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":175.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM5-40BK-F3","ModelNo":"AM5-40BK-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":16.0,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":175.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM5-40-F3","ModelNo":"AM5-40-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":13.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":143.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM5-40K-F3","ModelNo":"AM5-40K-F3","Watt":1.1,"Voltage":380.0,"RatedCurrent":4.17,"MaxCurrent":12.51,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":5.39,"MaxTorque":14.9,"RotorInertia":13.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":19.0,"Length":143.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM70-20B-F1","ModelNo":"AM70-20B-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":274.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":528.5,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM70-20BK-F1","ModelNo":"AM70-20BK-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":274.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":528.5,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM70-20-F1","ModelNo":"AM70-20-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":243.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":478.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM70-20K-F1","ModelNo":"AM70-20K-F1","Watt":11.0,"Voltage":380.0,"RatedCurrent":18.9,"MaxCurrent":50.1984,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":70.0,"MaxTorque":175.0,"RotorInertia":243.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":478.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-40B-F3","ModelNo":"AM8-40B-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":23.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":192.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM8-40BK-F3","ModelNo":"AM8-40BK-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":23.3,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":192.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-40-F3","ModelNo":"AM8-40-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":20.6,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":164.0,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM8-40K-F3","ModelNo":"AM8-40K-F3","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.44,"MaxCurrent":19.32,"RatedSpeed":2000.0,"MaxSpeed":4000.0,"RatedTorque":8.34,"MaxTorque":30.8,"RotorInertia":20.6,"EncoderBit":24.0,"MotorSupplier":"F3","FrameSize":130.0,"ShaftDiameter":22.0,"Length":164.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-50K-F1","ModelNo":"AM8-50K-F1","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.0,"MaxCurrent":18.0,"RatedSpeed":2000.0,"MaxSpeed":5000.0,"RatedTorque":8.0,"MaxTorque":24.0,"RotorInertia":19.0,"EncoderBit":18.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":22.0,"Length":160.0,"Brake":false,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM8-60SK-F1","ModelNo":"AM8-60SK-F1","Watt":1.7,"Voltage":380.0,"RatedCurrent":6.0,"MaxCurrent":20.196,"RatedSpeed":2000.0,"MaxSpeed":6000.0,"RatedTorque":8.0,"MaxTorque":24.0,"RotorInertia":19.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":130.0,"ShaftDiameter":22.0,"Length":175.0,"Brake":false,"KeySlot":true,"OilSeal":true},{"PartNo":"S10-AM90-30-F4J","ModelNo":"AM90-30-F4","Watt":18.8,"Voltage":380.0,"RatedCurrent":35.3,"MaxCurrent":100.9,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":90.0,"MaxTorque":250.0,"RotorInertia":297.0,"EncoderBit":24.0,"MotorSupplier":"F4","Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S10-AM90-30B-F4J","ModelNo":"AM90-30B-F4","Watt":18.8,"Voltage":380.0,"RatedCurrent":35.3,"MaxCurrent":100.9,"RatedSpeed":2000.0,"MaxSpeed":3000.0,"RatedTorque":90.0,"MaxTorque":250.0,"RotorInertia":353.0,"EncoderBit":24.0,"MotorSupplier":"F4","Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20B-F1","ModelNo":"AM95-20B-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":317.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":582.0,"Brake":true,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20BK-F1","ModelNo":"AM95-20BK-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":317.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":582.0,"Brake":true,"KeySlot":true,"OilSeal":false},{"PartNo":"S08-AM95-20-F1","ModelNo":"AM95-20-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":286.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":531.5,"Brake":false,"KeySlot":false,"OilSeal":false},{"PartNo":"S08-AM95-20K-F1","ModelNo":"AM95-20K-F1","Watt":15.0,"Voltage":380.0,"RatedCurrent":37.6,"MaxCurrent":95.1656,"RatedSpeed":1500.0,"MaxSpeed":2000.0,"RatedTorque":95.4,"MaxTorque":224.0,"RotorInertia":286.0,"EncoderBit":24.0,"MotorSupplier":"F1","FrameSize":180.0,"ShaftDiameter":35.0,"Length":531.5,"Brake":false,"KeySlot":true,"OilSeal":false}];
+const DRIVES = [{"PartNo":"S08-SPD32B1-300","ModelNo":"SPD32B1-300","DriveType":"SPD","Voltage":380.0,"Watt":30.0,"ElectricPhase":"ThreePhase","RatedCurrent":60.0,"MaxCurrent":106.0,"ModelCode":"B1","DriveSize":"SizeE","RegenRESPartNo":"S03-4000W-10O-A"},{"PartNo":"S08-SPD32B1-450","ModelNo":"SPD32B1-450","DriveType":"SPD","Voltage":380.0,"Watt":45.0,"ElectricPhase":"ThreePhase","RatedCurrent":91.0,"MaxCurrent":151.0,"ModelCode":"B1","DriveSize":"SizeF","RegenRESPartNo":"S03-3000W-20O*2並聯 或 S03-3000W-20O-A*2並聯"},{"PartNo":"S08-SPD32B1-550","ModelNo":"SPD32B1-550","DriveType":"SPD","Voltage":380.0,"Watt":55.0,"ElectricPhase":"ThreePhase","RatedCurrent":112.0,"MaxCurrent":201.0,"ModelCode":"B1","DriveSize":"SizeF","RegenRESPartNo":"S03-4000W-10OA*2並聯"},{"PartNo":"S08-SPD32C1-110","ModelNo":"SPD32C1-110","DriveType":"SPD","Voltage":380.0,"Watt":11.0,"ElectricPhase":"ThreePhase","RatedCurrent":27.0,"MaxCurrent":53.0,"ModelCode":"C1","DriveSize":"SizeD","RegenRESPartNo":"S03-3000W-20O"},{"PartNo":"S08-SPD32C1-185","ModelNo":"SPD32C1-185","DriveType":"SPD","Voltage":380.0,"Watt":18.5,"ElectricPhase":"ThreePhase","RatedCurrent":42.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SPD32C1-220","ModelNo":"SPD32C1-220","DriveType":"SPD","Voltage":380.0,"Watt":22.0,"ElectricPhase":"ThreePhase","RatedCurrent":53.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SPD32D1-075","ModelNo":"SPD32D1-075","DriveType":"SPD","Voltage":380.0,"Watt":7.5,"ElectricPhase":"ThreePhase","RatedCurrent":21.0,"MaxCurrent":35.0,"ModelCode":"D1","DriveSize":"SizeC++","RegenRESPartNo":"S03-1000W-30R(Axis) S03-3000W-30O-A(Spindle)"},{"PartNo":"S08-SPD32F1-050","ModelNo":"SPD32F1-050","DriveType":"SPD","Voltage":380.0,"Watt":5.0,"ElectricPhase":"ThreePhase","RatedCurrent":15.0,"MaxCurrent":35.0,"ModelCode":"F1","DriveSize":"SizeC++","RegenRESPartNo":"S03-1000W-30R(Axis) S03-3000W-30O-A(Spindle)"},{"PartNo":"S08-SVD22D1-010","ModelNo":"SVD22D1-010","DriveType":"SVD","Voltage":220.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":7.6,"MaxCurrent":14.1,"ModelCode":"D1","DriveSize":"SizeA","RegenRESPartNo":"S03-500W-40R-A"},{"PartNo":"S08-SVD22D1-030","ModelNo":"SVD22D1-030","DriveType":"SVD","Voltage":220.0,"Watt":3.0,"ElectricPhase":"ThreePhase","RatedCurrent":17.6,"MaxCurrent":42.4,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-20O-A"},{"PartNo":"S08-SVD32C1-110","ModelNo":"SVD32C1-110","DriveType":"SVD","Voltage":380.0,"Watt":11.0,"ElectricPhase":"ThreePhase","RatedCurrent":27.0,"MaxCurrent":53.0,"ModelCode":"C1","DriveSize":"SizeD","RegenRESPartNo":"S03-3000W/20Ω"},{"PartNo":"S08-SVD32C1-220","ModelNo":"SVD32C1-220","DriveType":"SVD","Voltage":380.0,"Watt":22.0,"ElectricPhase":"ThreePhase","RatedCurrent":53.0,"MaxCurrent":106.0,"ModelCode":"C1","DriveSize":"SizeD+","RegenRESPartNo":"S03-3000W-10O 或 S03-3000W-10O-A"},{"PartNo":"S08-SVD32D1-010","ModelNo":"SVD32D1-010","DriveType":"SVD","Voltage":380.0,"Watt":1.0,"ElectricPhase":"ThreePhase","RatedCurrent":4.3,"MaxCurrent":12.9,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-40R-A"},{"PartNo":"S08-SVD32D1-020","ModelNo":"SVD32D1-020","DriveType":"SVD","Voltage":380.0,"Watt":2.0,"ElectricPhase":"ThreePhase","RatedCurrent":8.4,"MaxCurrent":19.8,"ModelCode":"D1","DriveSize":"SizeB","RegenRESPartNo":"S03-500W-40R-A"}];
+const BUILD_STAMP = "2026-11-03 20:19";
+"use strict";
+
+const STORAGE_KEY = "cf2512.workbench.v5";
+const SCHEMA_VERSION = 5;
+
+const PRESETS = {
+  X: {
+    name: "X 轴",
+    mass: 1500,
+    ratio: 1,
+    lead: 40,
+    diameter: 50,
+    length: 3000,
+    theta: 0,
+    speed: 36,
+    acceleration: 0.3
+  },
+  Y: {
+    name: "Y 轴（重力）",
+    mass: 650,
+    ratio: 1,
+    lead: 20,
+    diameter: 40,
+    length: 1300,
+    theta: 90,
+    speed: 48,
+    acceleration: 0.5
+  },
+  Z: {
+    name: "Z 轴",
+    mass: 350,
+    ratio: 1,
+    lead: 16,
+    diameter: 36,
+    length: 730,
+    theta: 0,
+    speed: 48,
+    acceleration: 0.5
+  }
+};
+
+const FIELD_DEFS = {
+  mass: { label: "负载质量", unit: "kg", help: "工作台 + 工件 + 夹具", min: 0.1, max: 100000, step: "any" },
+  ratio: { label: "减速比 i", unit: ": 1", help: "1:3 时填 3", min: 0.01, max: 1000, step: "any" },
+  lead: { label: "丝杆导程 Pb", unit: "mm", help: "丝杆每转位移", min: 0.1, max: 500, step: "any" },
+  diameter: { label: "丝杆外径 D", unit: "mm", help: "实心轴按外径计算", min: 0.5, max: 500, step: "any" },
+  length: { label: "丝杆长度 L", unit: "mm", help: "丝杆总长", min: 1, max: 20000, step: "any" },
+  theta: { label: "姿态倾角 θ", unit: "deg", help: "0° 水平；90° 重力轴；大于 1° 默认要求抱闸", min: 0, max: 90, step: "any" },
+  speed: { label: "最高速度", unit: "m/min", help: "设备指令速度", min: 0.01, max: 300, step: "any" },
+  acceleration: { label: "加速度", unit: "G", help: "按原厂 v2 口径，1 G = 10 m/s²", min: 0.001, max: 10, step: "any" }
+};
+
+const CORE_FIELDS = [
+  "mass", "ratio", "lead", "diameter", "length",
+  "speed", "acceleration", "theta"
+];
+
+const FIXED = {
+  density: 7874,
+  efficiency: 0.9,
+  gravity: 10,
+  friction: 0.1,
+  innerDiameter: 0,
+  preload: 0,
+  extraInertia: 0,
+  processForce: 0,
+  inertiaLimit: 300,
+  staticSafety: 3,
+  driveCurrentReserve: 0.7,
+  peakSafety: 1 / 0.9
+};
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+let axisSerial = 0;
+let saveTimer = null;
+let toastTimer = null;
+
+function uid(prefix = "ax") {
+  axisSerial += 1;
+  return `${prefix}_${Date.now().toString(36)}_${axisSerial}`;
+}
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function esc(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function num(value, fallback = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function fmt(value, digits = 1) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return "—";
+  return parsed.toFixed(digits);
+}
+
+function fmtInt(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return "—";
+  return Math.round(parsed).toLocaleString("zh-CN");
+}
+
+function pct(value, digits = 1) {
+  return `${fmt(value, digits)}%`;
+}
+
+function makeAxis(preset = null, name = null) {
+  const base = clone(PRESETS.Z);
+  const source = preset ? PRESETS[preset] : base;
+  return {
+    id: uid(),
+    ...clone(source),
+    name: name || source.name || `轴 ${axisSerial}`,
+    brakePolicy: "auto",
+    structurePolicy: "standard"
+  };
+}
+
+function defaultState() {
+  return {
+    schema: SCHEMA_VERSION,
+    project: {
+      name: "巨冈 CF2512 伺服选型",
+      updatedAt: new Date().toISOString()
+    },
+    axes: [makeAxis("X"), makeAxis("Y"), makeAxis("Z")],
+    activeId: null
+  };
+}
+
+function normalizeState(raw) {
+  if (!raw || !Array.isArray(raw.axes) || raw.axes.length === 0) return defaultState();
+  const state = {
+    schema: SCHEMA_VERSION,
+    project: {
+      ...defaultState().project,
+      name: raw.project?.name || defaultState().project.name
+    },
+    axes: raw.axes.map((axis, index) => {
+      const fallback = index === 0 ? PRESETS.X : index === 1 ? PRESETS.Y : PRESETS.Z;
+      const normalizedAxis = {
+        ...clone(fallback),
+        id: axis.id || uid(),
+        name: axis.name || `轴 ${index + 1}`,
+        brakePolicy: "auto",
+        structurePolicy: "standard"
+      };
+      CORE_FIELDS.forEach((key) => {
+        normalizedAxis[key] = axis[key] ?? fallback[key];
+      });
+      return normalizedAxis;
+    }),
+    activeId: raw.activeId || raw.axes[0]?.id || null
+  };
+  if (!state.axes.some((axis) => axis.id === state.activeId)) {
+    state.activeId = state.axes[0].id;
+  }
+  return state;
+}
+
+function loadStoredState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    return normalizeState(JSON.parse(raw));
+  } catch (error) {
+    console.warn("Unable to load saved project", error);
+    return defaultState();
+  }
+}
+
+const state = loadStoredState();
+state.activeId = state.activeId || state.axes[0].id;
+state.results = {};
+state.showAll = {};
+state.dirty = {};
+
+function activeAxis() {
+  return state.axes.find((axis) => axis.id === state.activeId) || state.axes[0];
+}
+
+function saveState() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try {
+      state.project.updatedAt = new Date().toISOString();
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          schema: state.schema,
+          project: state.project,
+          axes: state.axes,
+          activeId: state.activeId
+        })
+      );
+    } catch (error) {
+      console.warn("Unable to save project", error);
+    }
+  }, 120);
+}
+
+function showToast(message, type = "success") {
+  const toast = $("#toast");
+  toast.textContent = message;
+  toast.classList.toggle("error", type === "error");
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+
+function setDirty(axisId = state.activeId) {
+  state.dirty[axisId] = true;
+  delete state.results[axisId];
+  renderAxisRail();
+  saveState();
+}
+
+function orientationLabel(theta) {
+  if (theta <= 1) return "水平轴";
+  if (theta >= 89) return "重力轴";
+  return `倾斜 ${fmt(theta, 0)}°`;
+}
+
+function statusOf(axisId) {
+  return state.results[axisId]?.status || (state.dirty[axisId] ? "dirty" : "idle");
+}
+
+function statusText(status) {
+  return {
+    pass: "通过",
+    warn: "待确认",
+    fail: "未通过",
+    dirty: "待重算",
+    idle: "未计算"
+  }[status] || "未计算";
+}
+
+function fieldMarkup(key, axis, extraClass = "") {
+  const def = FIELD_DEFS[key];
+  const value = axis[key] ?? "";
+  return `
+    <div class="field ${extraClass}" data-field-wrap="${key}">
+      <label for="f_${axis.id}_${key}">${esc(def.label)} <small>${key.toUpperCase()}</small></label>
+      <div class="input-wrap">
+        <input id="f_${axis.id}_${key}" data-field="${key}" type="number" inputmode="decimal"
+          value="${esc(value)}" min="${def.min}" max="${def.max}" step="${def.step}">
+        <span class="unit">${esc(def.unit)}</span>
+      </div>
+      <span class="field-help" id="h_${axis.id}_${key}" data-default-help="${esc(def.help)}">${esc(def.help)}</span>
+    </div>`;
+}
+
+function selectMarkup(key, axis, label, options, help = "") {
+  const value = axis[key] ?? options[0].value;
+  return `
+    <div class="field">
+      <label for="f_${axis.id}_${key}">${esc(label)} <small>${key.toUpperCase()}</small></label>
+      <div class="input-wrap">
+        <select id="f_${axis.id}_${key}" data-field="${key}">
+          ${options.map((option) => `<option value="${esc(option.value)}" ${option.value === value ? "selected" : ""}>${esc(option.label)}</option>`).join("")}
+        </select>
+      </div>
+      <span class="field-help">${esc(help)}</span>
+    </div>`;
+}
+
+function renderAxisRail() {
+  const list = $("#axisList");
+  if (!list) return;
+  $("#axisCount").textContent = String(state.axes.length).padStart(2, "0");
+  list.innerHTML = state.axes.map((axis, index) => {
+    const status = statusOf(axis.id);
+    const active = axis.id === state.activeId;
+    return `
+      <button class="axis-btn ${active ? "active" : ""}" type="button" data-action="select-axis" data-axis-id="${axis.id}" ${active ? 'aria-current="true"' : ""}>
+        <span class="axis-index">${String(index + 1).padStart(2, "0")}</span>
+        <span class="axis-copy">
+          <strong>${esc(axis.name || `轴 ${index + 1}`)}</strong>
+          <small>${fmtInt(axis.mass)} kg · i=${fmt(axis.ratio, 2)} · ${orientationLabel(num(axis.theta))}</small>
+        </span>
+        <span class="status-dot ${esc(status)}" title="${esc(statusText(status))}"></span>
+      </button>`;
+  }).join("");
+}
+
+function renderProjectFields() {
+  const name = $("#projectName");
+  if (name) name.value = state.project.name || "";
+}
+
+function modeCopy() {
+  return "简易核心初选：只使用负载质量、减速比、丝杆导程/外径/长度、最高速度、加速度和姿态倾角。摩擦按原厂 v2 固定 μ=0.10；内孔、工艺力、预紧、附加惯量、行程和 RMS 不作为输入。";
+}
+
+function renderForm() {
+  const axis = activeAxis();
+  const root = $("#formRoot");
+  if (!root) return;
+  $("#modeDescription").textContent = modeCopy();
+
+  const coreHtml = CORE_FIELDS.map((key) => {
+    if (key === "theta") {
+      return `
+        <div class="field span-2" data-field-wrap="theta">
+          <label for="f_${axis.id}_theta">姿态倾角 θ <small>THETA</small></label>
+          <div class="input-wrap">
+            <input id="f_${axis.id}_theta" data-field="theta" type="number" inputmode="decimal"
+              value="${esc(axis.theta)}" min="0" max="90" step="any">
+            <span class="unit">deg</span>
+          </div>
+          <div class="orientation-row">
+            <button class="chip-btn ${num(axis.theta) === 0 ? "active" : ""}" type="button" data-action="set-theta" data-theta="0">水平 0°</button>
+            <button class="chip-btn ${num(axis.theta) === 90 ? "active" : ""}" type="button" data-action="set-theta" data-theta="90">重力轴 90°</button>
+            <span class="field-help">倾斜轴会自动要求抱闸</span>
+          </div>
+        </div>`;
+    }
+    return fieldMarkup(key, axis);
+  }).join("");
+
+  const status = statusOf(axis.id);
+  const stateLine = status === "dirty"
+    ? "参数已修改，需要重新计算。"
+    : status === "idle"
+      ? "填写参数后计算当前轴，或一次计算全部轴。"
+      : `当前结果：${statusText(status)}。`;
+
+  root.innerHTML = `
+    <div class="field-grid">
+      <div class="field span-2">
+        <label for="f_${axis.id}_name">轴名称 <small>AXIS NAME</small></label>
+        <div class="input-wrap">
+          <input id="f_${axis.id}_name" data-field="name" type="text" maxlength="40" value="${esc(axis.name)}" autocomplete="off">
+        </div>
+        <span class="field-help">例如 X 轴、Y 重力轴、刀库轴</span>
+      </div>
+      ${coreHtml}
+    </div>
+
+    <div class="form-mode-note simple">
+      <strong>简易核心初选</strong>
+      <span>只填写图纸可确认的 8 个核心参数。摩擦按原厂 v2 固定 μ=0.10；内孔、工艺力、预紧、附加惯量、行程和校核级别不作为输入。</span>
+    </div>
+
+    <div class="action-bar">
+      <div class="muted-text" id="formStateText">${stateLine}</div>
+      <div class="action-group">
+        <button class="btn ghost" type="button" data-action="guide">参数怎么填</button>
+        <button class="btn ghost" type="button" data-action="formula">口径说明</button>
+        <button class="btn accent" type="button" data-action="calculate-axis">计算当前轴</button>
+        <button class="btn primary" type="button" data-action="calculate-all">计算全部轴</button>
+      </div>
+    </div>`;
+}
+
+function fieldError(key, axis, rawValue = axis[key]) {
+  if (key === "name") {
+    return String(rawValue || "").trim() ? "" : "请填写轴名称";
+  }
+  if (!(key in FIELD_DEFS)) return "";
+  const def = FIELD_DEFS[key];
+  const value = Number(rawValue);
+  if (rawValue === "" || rawValue === null || rawValue === undefined || !Number.isFinite(value)) {
+    return "请填写有效数字";
+  }
+  if (value < def.min || value > def.max) {
+    return `合理范围：${def.min} ～ ${def.max}${def.unit ? ` ${def.unit}` : ""}`;
+  }
+  return "";
+}
+
+function validateAxis(axis) {
+  const errors = {};
+  ["name", ...CORE_FIELDS].forEach((key) => {
+    const error = fieldError(key, axis);
+    if (error) errors[key] = error;
+  });
+  return errors;
+}
+
+function showFieldErrors(axis, errors) {
+  const form = $("#formRoot");
+  if (!form) return;
+  $$("[data-field]", form).forEach((input) => {
+    const key = input.dataset.field;
+    const error = errors[key];
+    const help = $(`#h_${axis.id}_${key}`);
+    input.classList.toggle("invalid", Boolean(error));
+    input.setAttribute("aria-invalid", error ? "true" : "false");
+    if (help) {
+      help.textContent = error || help.dataset.defaultHelp || "";
+      help.classList.toggle("error", Boolean(error));
+    }
+  });
+  const firstKey = Object.keys(errors)[0];
+  if (firstKey) {
+    const input = $(`[data-field="${firstKey}"]`, form);
+    if (input) {
+      const details = input.closest("details");
+      if (details) details.open = true;
+      input.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => input.focus({ preventScroll: true }), 320);
+    }
+  }
+}
+
+function validateOneField(input) {
+  const axis = activeAxis();
+  const key = input.dataset.field;
+  if (!key) return true;
+  const error = fieldError(key, axis, input.value);
+  const help = $(`#h_${axis.id}_${key}`);
+  input.classList.toggle("invalid", Boolean(error));
+  input.setAttribute("aria-invalid", error ? "true" : "false");
+  if (help) {
+    help.textContent = error || help.dataset.defaultHelp || "";
+    help.classList.toggle("error", Boolean(error));
+  }
+  return !error;
+}
+
+function applyTheta(theta) {
+  const axis = activeAxis();
+  axis.theta = theta;
+  const input = $(`[data-field="theta"]`);
+  if (input) input.value = theta;
+  $$(".orientation-row .chip-btn").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.theta) === Number(theta));
+  });
+  setDirty();
+}
+
+function updateAxisField(input) {
+  const axis = activeAxis();
+  const key = input.dataset.field;
+  if (!key) return;
+  if (key === "name") {
+    axis.name = input.value;
+  } else if (key === "brakePolicy" || key === "structurePolicy") {
+    axis[key] = input.value;
+  } else if (input.value === "") {
+    axis[key] = "";
+  } else {
+    axis[key] = input.valueAsNumber;
+  }
+  validateOneField(input);
+  if (key === "theta") {
+    $$(".orientation-row .chip-btn").forEach((button) => {
+      button.classList.toggle("active", Number(button.dataset.theta) === Number(axis.theta));
+    });
+  }
+  setDirty();
+}
+
+function switchAxis(id) {
+  if (!state.axes.some((axis) => axis.id === id)) return;
+  state.activeId = id;
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+}
+
+function addAxis(preset = null) {
+  const axis = makeAxis(preset, preset ? null : `自定义轴 ${state.axes.length + 1}`);
+  state.axes.push(axis);
+  state.activeId = axis.id;
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+  $("#configSection").scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast(`已新增 ${axis.name}`);
+}
+
+function duplicateAxis() {
+  const source = activeAxis();
+  const copy = clone(source);
+  copy.id = uid();
+  copy.name = `${source.name} 副本`;
+  state.axes.push(copy);
+  state.activeId = copy.id;
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+  showToast("已复制当前轴参数");
+}
+
+function deleteAxis() {
+  if (state.axes.length <= 1) {
+    showToast("至少保留一个轴", "error");
+    return;
+  }
+  const axis = activeAxis();
+  if (!window.confirm(`确定删除「${axis.name}」？`)) return;
+  const index = state.axes.findIndex((item) => item.id === axis.id);
+  state.axes.splice(index, 1);
+  state.activeId = state.axes[Math.max(0, index - 1)].id;
+  delete state.results[axis.id];
+  delete state.showAll[axis.id];
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+  showToast("轴已删除");
+}
+
+function openFormulaModal() {
+  const modal = $("#formulaModal");
+  modal.classList.add("open");
+  setTimeout(() => $(".icon-button", modal)?.focus(), 50);
+}
+
+function closeFormulaModal() {
+  $("#formulaModal").classList.remove("open");
+}
+
+function openGuideModal() {
+  const modal = $("#guideModal");
+  modal.classList.add("open");
+  setTimeout(() => $(".icon-button", modal)?.focus(), 50);
+}
+
+function closeGuideModal() {
+  $("#guideModal").classList.remove("open");
+}
+
+function fixedParams(axis) {
+  return {
+    ...FIXED,
+    angleRad: (num(axis.theta) * Math.PI) / 180,
+    v2Angle: num(axis.theta) / (2 * Math.PI)
+  };
+}
+
+function computeBase(axis) {
+  const p = fixedParams(axis);
+  const mass = num(axis.mass);
+  const ratio = num(axis.ratio, 1);
+  const lead = num(axis.lead) / 1000;
+  const outerDiameter = num(axis.diameter) / 1000;
+  const innerDiameter = 0;
+  const screwLength = num(axis.length) / 1000;
+  const tableSpeed = num(axis.speed) / 60;
+  const tableAcceleration = num(axis.acceleration) * p.gravity;
+
+  const screwInertia = Math.PI * p.density * screwLength *
+    (Math.pow(outerDiameter, 4) - Math.pow(innerDiameter, 4)) / 32;
+  const tableInertiaAtScrew = mass * Math.pow(lead / (2 * Math.PI), 2);
+  const loadInertia = (screwInertia + tableInertiaAtScrew) / Math.pow(ratio, 2) + p.extraInertia;
+  const motorSpeed = tableSpeed * ratio / lead * 60;
+
+  const normalForce = mass * p.gravity * Math.cos(p.v2Angle);
+  const gravityAlongAxis = mass * p.gravity * Math.sin(p.v2Angle);
+  const frictionForce = p.friction * normalForce;
+  const axialForce = gravityAlongAxis + Math.abs(p.processForce) + frictionForce;
+  const loadTorque = (axialForce * lead / (2 * Math.PI * p.efficiency) + Math.abs(p.preload)) / ratio;
+  const staticTorque = loadTorque;
+
+  const motorAcceleration = (2 * Math.PI * tableAcceleration * ratio) / lead;
+  const inertiaLimitRatio = p.inertiaLimit / 100;
+  const referenceMotorInertia = loadInertia / inertiaLimitRatio;
+  const referencePeakTorque = (
+    loadTorque +
+    (loadInertia / p.efficiency + referenceMotorInertia) * motorAcceleration
+  ) * p.peakSafety;
+
+  const referencePeakPower = referencePeakTorque * 2 * Math.PI * motorSpeed / 60 / 1000;
+
+  return {
+    params: p,
+    mass,
+    ratio,
+    lead,
+    outerDiameter,
+    innerDiameter,
+    screwLength,
+    tableSpeed,
+    tableAcceleration,
+    screwInertia,
+    tableInertiaAtScrew,
+    loadInertia,
+    motorSpeed,
+    normalForce,
+    gravityAlongAxis,
+    frictionForce,
+    axialForce,
+    loadTorque,
+    staticTorque,
+    motorAcceleration,
+    referenceMotorInertia,
+    referencePeakTorque,
+    referencePeakPower,
+    inertiaLimitRatio
+  };
+}
+
+function findDrive(motor, peakCurrent) {
+  const voltage = num(motor.Voltage);
+  const currentLoad = Math.max(num(motor.MaxCurrent), num(peakCurrent));
+  const designFactor = FIXED.driveCurrentReserve;
+  const requiredMax = currentLoad / designFactor;
+  const exact = DRIVES
+    .filter((drive) => drive.DriveType === "SPD" &&
+      num(drive.Voltage) === voltage &&
+      num(drive.RatedCurrent) >= num(motor.RatedCurrent) &&
+      num(drive.MaxCurrent) >= requiredMax)
+    .sort((a, b) => num(a.MaxCurrent) - num(b.MaxCurrent) || num(a.Watt) - num(b.Watt));
+  if (exact.length) {
+    return { ...exact[0], exact: true, requiredMax, designFactor, currentLoad };
+  }
+
+  const loose = DRIVES
+    .filter((drive) => drive.DriveType === "SPD" &&
+      num(drive.Voltage) === voltage &&
+      num(drive.MaxCurrent) >= requiredMax)
+    .sort((a, b) => num(a.MaxCurrent) - num(b.MaxCurrent));
+  if (loose.length) {
+    return { ...loose[0], exact: false, requiredMax, designFactor, currentLoad };
+  }
+  return null;
+}
+
+function evaluateMotor(base, motor) {
+  const rotorInertia = num(motor.RotorInertia) * 1e-4;
+  const inertiaRatio = rotorInertia > 0 ? (base.loadInertia / rotorInertia) * 100 : Infinity;
+  const accelerationTorque = (base.loadInertia / base.params.efficiency + rotorInertia) * base.motorAcceleration;
+  const peakTorque = (base.loadTorque + accelerationTorque) * base.params.peakSafety;
+  const peakCurrent = num(motor.RatedTorque) > 0
+    ? (peakTorque / num(motor.RatedTorque)) * num(motor.RatedCurrent)
+    : Infinity;
+  const staticLimit = num(motor.RatedTorque) / FIXED.staticSafety;
+  const staticMargin = base.staticTorque > 0 ? num(motor.RatedTorque) / base.staticTorque : Infinity;
+  const peakMargin = peakTorque > 0 ? num(motor.MaxTorque) / peakTorque : Infinity;
+  const speedMargin = base.motorSpeed > 0 ? num(motor.MaxSpeed) / base.motorSpeed : Infinity;
+  const currentMargin = peakCurrent > 0 ? num(motor.MaxCurrent) / peakCurrent : Infinity;
+  const drive = findDrive(motor, peakCurrent);
+  const failures = [];
+
+  if (inertiaRatio >= FIXED.inertiaLimit - 1e-9) failures.push("惯量比");
+  if (staticMargin <= FIXED.staticSafety + 1e-9) failures.push("静止扭矩");
+  if (peakMargin < 1 - 1e-9) failures.push("峰值扭矩");
+  if (speedMargin < 1 - 1e-9) failures.push("最高转速");
+  if (currentMargin < 1 - 1e-9) failures.push("峰值电流");
+  if (!drive || !drive.exact) failures.push("驱动器电流");
+  const status = failures.length ? "fail" : "pass";
+
+  return {
+    motor,
+    rotorInertia,
+    inertiaRatio,
+    accelerationTorque,
+    peakTorque,
+    peakCurrent,
+    staticLimit,
+    staticMargin,
+    peakMargin,
+    speedMargin,
+    currentMargin,
+    drive,
+    driveMargin: drive?.requiredMax > 0 ? num(drive.MaxCurrent) / drive.requiredMax : null,
+    failures,
+    status,
+    peakPower: peakTorque * 2 * Math.PI * Math.min(base.motorSpeed, num(motor.MaxSpeed)) / 60 / 1000
+  };
+}
+
+function dedupeMotors(motors) {
+  const groups = new Map();
+  motors.forEach((motor) => {
+    const signature = [
+      motor.Watt,
+      motor.RatedTorque,
+      motor.MaxTorque,
+      motor.RotorInertia,
+      motor.RatedSpeed,
+      motor.MaxSpeed,
+      motor.Brake,
+      motor.Voltage
+    ].join("|");
+    const existing = groups.get(signature);
+    if (!existing) {
+      groups.set(signature, motor);
+      return;
+    }
+    if (existing.KeySlot && !motor.KeySlot) {
+      groups.set(signature, motor);
+    }
+  });
+  return Array.from(groups.values());
+}
+
+function motorPool(axis) {
+  const theta = num(axis.theta);
+  let brakeRequirement = null;
+  if (axis.brakePolicy === "required") brakeRequirement = true;
+  else if (axis.brakePolicy === "none") brakeRequirement = false;
+  else if (axis.brakePolicy === "auto") brakeRequirement = theta > 1;
+
+  let pool = MOTORS.filter((motor) => {
+    if (brakeRequirement === true && !motor.Brake) return false;
+    if (brakeRequirement === false && motor.Brake) return false;
+    if (axis.structurePolicy !== "all" && motor.KeySlot) return false;
+    return true;
+  });
+  pool = axis.structurePolicy === "all" ? pool : dedupeMotors(pool);
+  return pool;
+}
+
+function candidateSort(a, b) {
+  const rank = { pass: 0, warn: 1, fail: 2 };
+  if (rank[a.status] !== rank[b.status]) return rank[a.status] - rank[b.status];
+  if (a.status === "fail") {
+    if (a.failures.length !== b.failures.length) return a.failures.length - b.failures.length;
+    return b.peakMargin - a.peakMargin;
+  }
+  return num(a.motor.Watt) - num(b.motor.Watt) ||
+    num(a.motor.MaxTorque) - num(b.motor.MaxTorque) ||
+    b.inertiaRatio - a.inertiaRatio;
+}
+
+function calculateAxis(axis) {
+  const base = computeBase(axis);
+  const pool = motorPool(axis);
+  const candidates = pool.map((motor) => evaluateMotor(base, motor)).sort(candidateSort);
+  const pass = candidates.filter((candidate) => candidate.status === "pass");
+  const conditional = candidates.filter((candidate) => candidate.status === "warn");
+  const recommended = pass[0] || conditional[0] || candidates[0] || null;
+  const status = recommended
+    ? recommended.status === "pass"
+      ? "pass"
+      : recommended.status === "warn"
+        ? "warn"
+        : "fail"
+    : "fail";
+  return {
+    axisId: axis.id,
+    axisName: axis.name,
+    base,
+    pool,
+    candidates,
+    pass,
+    conditional,
+    recommended,
+    status,
+    calculatedAt: new Date().toISOString(),
+    passCount: pass.length,
+    conditionalCount: conditional.length,
+    failCount: candidates.length - pass.length - conditional.length
+  };
+}
+
+function statCard(label, value, unit = "", note = "") {
+  return `
+    <div class="stat-card">
+      <div class="stat-label">${esc(label)}</div>
+      <div class="stat-value">${esc(value)} ${unit ? `<small>${esc(unit)}</small>` : ""}</div>
+      ${note ? `<div class="stat-note">${esc(note)}</div>` : ""}
+    </div>`;
+}
+
+function structureTags(motor) {
+  return [
+    motor.Brake ? '<span class="tag brake">抱闸</span>' : "",
+    motor.KeySlot ? '<span class="tag key">键槽</span>' : ""
+  ].filter(Boolean).join(" ") || '<span class="tag">标准</span>';
+}
+
+function candidateRow(candidate, index, recommendedId, axis, result) {
+  const motor = candidate.motor;
+  const ratioWithinLimit = candidate.inertiaRatio < FIXED.inertiaLimit - 1e-9;
+  const ratioWidth = Math.min(100, Math.max(2, (candidate.inertiaRatio / FIXED.inertiaLimit) * 100));
+  const ratioClass = ratioWithinLimit ? "" : "fail";
+  const statusLabel = candidate.status === "pass" ? "通过" : "不通过";
+  const reasons = candidate.failures.length
+    ? candidate.failures.join(" / ")
+    : "六项核心判据通过";
+  const driveText = candidate.drive
+    ? `${esc(candidate.drive.ModelNo)}<br><span class="${candidate.drive.exact ? "muted-text" : "fail-text"}">需求 ${fmt(candidate.drive.requiredMax, 1)} / 最大 ${fmt(candidate.drive.MaxCurrent, 1)} A</span>`
+    : '<span class="fail-text">无匹配</span>';
+  const recommended = motor.PartNo === recommendedId;
+  return `
+    <tr class="${recommended ? "recommended" : ""} ${candidate.status === "fail" ? "failed" : ""}">
+      <td class="num">${recommended ? '<b>★</b>' : index + 1}</td>
+      <td class="model">
+        <strong>${esc(motor.ModelNo)}</strong>
+        <small>${esc(motor.PartNo)}</small>
+      </td>
+      <td>${structureTags(motor)}</td>
+      <td class="num">${fmt(motor.Watt, 1)}</td>
+      <td class="num">${fmt(motor.RatedTorque, 1)} / ${fmt(motor.MaxTorque, 1)}</td>
+      <td class="num">${fmt(motor.RotorInertia, 1)}</td>
+      <td class="num ${ratioWithinLimit ? "ok-text" : "fail-text"}">
+        ${pct(candidate.inertiaRatio)}
+        <div class="mini-progress"><i class="${ratioClass}" style="width:${ratioWidth}%"></i></div>
+      </td>
+      <td class="num ${candidate.peakMargin >= 1 ? "ok-text" : "fail-text"}">${fmt(candidate.peakTorque, 1)}</td>
+      <td class="num ${candidate.currentMargin >= 1 ? "ok-text" : "fail-text"}">${fmt(candidate.peakCurrent, 1)} / ${fmt(motor.MaxCurrent, 1)}</td>
+      <td class="num ${candidate.speedMargin >= 1 ? "ok-text" : "fail-text"}">${fmt(result.base.motorSpeed, 0)} / ${fmt(motor.MaxSpeed, 0)}</td>
+      <td class="num ${candidate.staticMargin > FIXED.staticSafety ? "ok-text" : "fail-text"}">${fmt(result.base.staticTorque, 1)} / ${fmt(candidate.staticLimit, 1)}</td>
+      <td>${driveText}</td>
+      <td>
+        <span class="tag ${candidate.status}" title="${esc(reasons)}">${statusLabel}</span>
+        <div class="stat-note" style="max-width:120px;white-space:normal">${esc(reasons)}</div>
+      </td>
+    </tr>`;
+}
+
+function renderResultHeader(result) {
+  const status = result.status;
+  const statusLabel = status === "pass" ? "SELECTION PASS" : "NO MATCH";
+  return `
+    <div class="result-head">
+      <div class="result-heading">
+        <div class="kicker">02 / Sizing Result · 简易核心初选</div>
+        <h2>${esc(result.axisName)} · 选型结果</h2>
+        <p>候选池 ${result.pool.length} 款 · 通过 ${result.passCount} 款 · 计算于 ${new Date(result.calculatedAt).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}</p>
+      </div>
+      <span class="status-pill ${status}">${status === "pass" ? "●" : "×"} ${statusLabel}</span>
+    </div>`;
+}
+
+function renderAlerts(result, axis) {
+  const alerts = [];
+  if (result.status === "fail") {
+    alerts.push({
+      type: "danger",
+      icon: "×",
+      text: "当前筛选池内没有全部通过六项核心判据的 F 系列型号。表格中保留最接近方案并列出失败项。"
+    });
+  }
+  if (!alerts.length) {
+    alerts.push({
+      type: "info",
+      icon: "✓",
+      text: "候选已通过惯量比、静止扭矩、峰值扭矩、最高转速、峰值电流和驱动器 30% 电流余量六项核心判据。"
+    });
+  }
+  alerts.push({
+    type: "warn",
+    icon: "!",
+    text: "这是原厂 v2 口径的核心初选：导轨摩擦固定 μ=0.10，未计入内孔、切削/工艺力、丝杆预紧、联轴器惯量、行程节拍、热变形、共振和驱动过载曲线。存在具体工况时必须另行复核。"
+  });
+  if (axis.brakePolicy === "auto" && num(axis.theta) > 1) {
+    alerts.push({
+      type: "info",
+      icon: "i",
+      text: "倾角大于 1°，候选池已自动限定为带抱闸电机。"
+    });
+  }
+  return `<div class="alert-stack">${alerts.map((alert) => `
+    <div class="alert ${alert.type}">
+      <span class="alert-icon">${alert.icon}</span>
+      <span>${esc(alert.text)}</span>
+    </div>`).join("")}</div>`;
+}
+
+function renderRecommendation(result, axis) {
+  const rec = result.recommended;
+  if (!rec) {
+    return `
+      <div class="alert danger">
+        <span class="alert-icon">×</span>
+        <span>没有可评估的 F 系列型号。请检查抱闸与特殊结构筛选条件。</span>
+      </div>`;
+  }
+  const motor = rec.motor;
+  const recReason = rec.status === "pass"
+    ? `六项核心判据通过，按额定功率和最大扭矩从小到大优先；惯量比 ${pct(rec.inertiaRatio)}，峰值扭矩余量 ${fmt(rec.peakMargin, 2)}×，静止扭矩余量 ${fmt(rec.staticMargin, 2)}×，驱动器电流余量 ${fmt(rec.driveMargin, 2)}×。`
+    : `当前最接近方案，仍有 ${esc(rec.failures.join("、"))} 未通过。`;
+  const driver = rec.drive;
+  return `
+    <div class="recommend-card">
+      <div>
+        <div class="recommend-label">Recommended servo motor</div>
+        <div class="motor-name">${esc(motor.ModelNo)}</div>
+        <div class="motor-sub">${esc(motor.PartNo)} · ${fmt(motor.Voltage, 0)} V · F 系列 · ${structureTags(motor)}</div>
+        <p class="recommend-reason">${recReason}</p>
+      </div>
+      <div class="recommend-specs">
+        <div class="recommend-spec"><span>额定功率</span><strong>${fmt(motor.Watt, 1)} kW</strong></div>
+        <div class="recommend-spec"><span>额定 / 最大扭矩</span><strong>${fmt(motor.RatedTorque, 1)} / ${fmt(motor.MaxTorque, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>转子惯量</span><strong>${fmt(motor.RotorInertia, 1)} ×10⁻⁴</strong></div>
+        <div class="recommend-spec"><span>惯量比</span><strong>${pct(rec.inertiaRatio)}</strong></div>
+        <div class="recommend-spec"><span>候选峰值扭矩</span><strong>${fmt(rec.peakTorque, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>候选峰值电流</span><strong>${fmt(rec.peakCurrent, 1)} A</strong></div>
+        <div class="recommend-spec"><span>需求 / 最高转速</span><strong>${fmt(result.base.motorSpeed, 0)} / ${fmt(motor.MaxSpeed, 0)} rpm</strong></div>
+        <div class="recommend-spec"><span>静止需求 / 额定÷3</span><strong>${fmt(result.base.staticTorque, 1)} / ${fmt(rec.staticLimit, 1)} N·m</strong></div>
+        <div class="recommend-spec"><span>抱闸结构</span><strong>${motor.Brake ? "带抱闸" : "无抱闸"}</strong></div>
+      </div>
+      <div class="recommend-driver">
+        <div class="recommend-label">Single-axis drive reference</div>
+        <div class="driver-name">${driver ? esc(driver.ModelNo) : "无匹配型号"}</div>
+        <p>${driver ? `${esc(driver.DriveType)} · ${fmt(driver.Watt, 0)} kW · 额定 ${fmt(driver.RatedCurrent, 1)} A / 最大 ${fmt(driver.MaxCurrent, 1)} A · ${esc(driver.DriveSize)}` : "需放宽电流余量或另行选型"}</p>
+        <p>${driver
+          ? `基础校核已计入驱动器 30% 电流余量：实际需求 ${fmt(driver.currentLoad, 1)} A ÷ 0.7，要求驱动器最大电流 ≥ ${fmt(driver.requiredMax, 1)} A。`
+          : "当前 SPD 目录中没有满足额定电流、峰值电流及 30% 余量要求的驱动器。"}</p>
+      </div>
+    </div>`;
+}
+
+function formulaRows(result) {
+  const b = result.base;
+  const p = b.params;
+  const rows = [
+    ["固定常量", `ρ=${fmt(p.density, 0)} kg/m³ · η=${fmt(p.efficiency, 2)} · g=${fmt(p.gravity, 1)} · μ=${fmt(p.friction, 2)} · K=${fmt(p.peakSafety, 3)} · λmax=${fmt(p.inertiaLimit, 0)}% · Kstatic=${FIXED.staticSafety} · Kdrive=${fmt(FIXED.driveCurrentReserve, 2)}`, "按原厂 v2 口径固定"],
+    ["未纳入项", "d=0 · Fprocess=0 · Tpreload=0 · Jextra=0", "按零处理"],
+    ["丝杆惯量 Jbs", "π·ρ·L·D⁴/32", `${fmt(b.screwInertia * 1e4, 2)} ×10⁻⁴`],
+    ["负载惯量 Jload", "(Jbs + M·P²/(2π)²)/i²", `${fmt(b.loadInertia * 1e4, 2)} ×10⁻⁴`],
+    ["电机转速", "Vtable · i / P", `${fmt(b.motorSpeed, 1)} rpm`],
+    ["轴向重力", "M·g·sin(θ/2π)", `${fmt(b.gravityAlongAxis, 1)} N`],
+    ["轴向合力", "F = M·g·(sin(θ/2π) + μ·cos(θ/2π))", `${fmt(b.axialForce, 1)} N`],
+    ["静止/负载扭矩", "T_load = F·P/(2π·η·i)", `${fmt(b.staticTorque, 3)} N·m`],
+    ["静止扭矩判据", "T_static < 电机额定扭矩 / 3", "θ 和 μ 按原厂 v2 口径；静止扭矩余量必须 > 3×"],
+    ["驱动器电流判据", `I_req = max(电机最大电流, I_peak) / ${fmt(FIXED.driveCurrentReserve, 1)}`, `I_req ≤ 驱动器最大电流，且驱动器额定电流 ≥ 电机额定电流；保留 ${fmt((1 - FIXED.driveCurrentReserve) * 100, 0)}% 余量`],
+    ["电机角加速度", "2π·a·i/P", `${fmt(b.motorAcceleration, 1)} rad/s²`],
+    [`惯量比基准峰值扭矩（λ=${fmt(b.inertiaLimitRatio * 100, 0)}%）`, "[Tload + (Jload/η + Jload/λ)·α]·K", `${fmt(b.referencePeakTorque, 2)} N·m`]
+  ];
+  if (result.recommended) {
+    const rec = result.recommended;
+    rows.push(
+      [`候选 ${rec.motor.ModelNo} 峰值扭矩`, "代入该电机真实转子惯量 Jr", `${fmt(rec.peakTorque, 2)} N·m`],
+      [`候选 ${rec.motor.ModelNo} 峰值电流`, "Tpeak / Trated × Irated", `${fmt(rec.peakCurrent, 2)} A`],
+      [`候选 ${rec.motor.ModelNo} 静止扭矩`, "T_static / (Trated / 3)", `${fmt(b.staticTorque, 2)} / ${fmt(rec.staticLimit, 2)} N·m`],
+      [`候选 ${rec.motor.ModelNo} 驱动器需求`, `max(Imotor,max, Ipeak) / ${fmt(FIXED.driveCurrentReserve, 1)}`, rec.drive ? `${fmt(rec.drive.requiredMax, 2)} A → ${rec.drive.ModelNo}` : "无匹配"],
+      [`候选 ${rec.motor.ModelNo} 惯量比`, "Jload / Jmotor × 100%", pct(rec.inertiaRatio)]
+    );
+  }
+  return rows;
+}
+
+function renderFormulaPanel(result) {
+  return `
+    <details class="formula-panel">
+      <summary>展开计算过程与口径明细</summary>
+      <div class="formula-body">
+        ${formulaRows(result).map(([label, formula, value]) => `
+          <div class="formula-row">
+            <strong>${esc(label)}</strong>
+            <code>${esc(formula)}</code>
+            <em>${esc(value)}</em>
+          </div>`).join("")}
+      </div>
+    </details>`;
+}
+
+function renderCandidateTable(result, axis) {
+  const showAll = Boolean(state.showAll[axis.id]);
+  const visible = result.candidates.slice(0, showAll ? result.candidates.length : Math.min(14, result.candidates.length));
+  const recommendedId = result.recommended?.motor.PartNo || "";
+  if (!result.candidates.length) {
+    return `
+      <div class="alert danger">
+        <span class="alert-icon">×</span>
+        <span>当前结构筛选后没有候选电机。请检查抱闸策略，或将特殊结构策略改为“包含 K / SK / BK”后重算。</span>
+      </div>`;
+  }
+  return `
+    <div class="block-title">
+      <h3>候选电机明细</h3>
+      <span>${result.candidates.length} EVALUATED / ${result.passCount} PASS</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>型号 / 物料号</th>
+            <th>结构</th>
+            <th>功率<br>kW</th>
+            <th>额定 / 最大扭矩<br>N·m</th>
+            <th>转子惯量<br>×10⁻⁴</th>
+            <th>惯量比</th>
+            <th>峰值扭矩<br>N·m</th>
+            <th>峰值 / 最大电流<br>A</th>
+            <th>需求 / 最高转速<br>rpm</th>
+            <th>静止需求 / 允许上限<br>N·m</th>
+            <th>驱动参考</th>
+            <th>结论</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${visible.map((candidate, index) => candidateRow(candidate, index, recommendedId, axis, result)).join("")}
+        </tbody>
+      </table>
+    </div>
+    ${result.candidates.length > 14 ? `
+      <div class="action-bar" style="justify-content:flex-end">
+        <button class="btn ghost" type="button" data-action="toggle-candidates">
+          ${showAll ? "仅显示前 14 款" : `显示全部 ${result.candidates.length} 款`}
+        </button>
+      </div>` : ""}`;
+}
+
+function renderCompareStrip(result) {
+  const b = result.base;
+  const rec = result.recommended;
+  return `
+    <div class="compare-strip">
+      <div class="compare-card">
+        <span>惯量比基准峰值扭矩 @ ${fmt(b.inertiaLimitRatio * 100, 0)}%</span>
+        <strong>${fmt(b.referencePeakTorque, 2)} N·m</strong>
+        <small>按 300% 惯量比基准估算，最终结果使用各电机真实转子惯量</small>
+      </div>
+      <div class="compare-card">
+        <span>推荐电机峰值余量</span>
+        <strong>${rec ? `${fmt(rec.peakMargin, 2)}×` : "—"}</strong>
+        <small>${rec ? `${fmt(rec.peakTorque, 1)} / ${fmt(rec.motor.MaxTorque, 1)} N·m` : "无候选"}</small>
+      </div>
+      <div class="compare-card">
+        <span>推荐电机静止扭矩余量</span>
+        <strong>${rec ? `${fmt(rec.staticMargin, 2)}×` : "—"}</strong>
+        <small>${rec ? `${fmt(rec.motor.RatedTorque, 1)} / ${fmt(b.staticTorque, 1)} N·m；要求 T_static < 额定扭矩/3` : "无候选"}</small>
+      </div>
+    </div>`;
+}
+
+function renderAxisMatrix() {
+  const rows = state.axes
+    .map((axis) => ({ axis, result: state.results[axis.id] }))
+    .filter((item) => item.result);
+  if (rows.length < 2) return "";
+  return `
+    <div class="matrix-card">
+      <div class="block-title">
+        <h3>全轴选型总览</h3>
+        <span>${rows.length} AXIS CALCULATED</span>
+      </div>
+      <div class="table-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>轴</th>
+              <th>推荐型号</th>
+              <th>功率</th>
+              <th>惯量比</th>
+              <th>静止余量</th>
+              <th>峰值扭矩</th>
+              <th>峰值电流</th>
+              <th>转速需求</th>
+              <th>驱动参考</th>
+              <th>结论</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(({ axis, result }) => {
+              const rec = result.recommended;
+              return `
+                <tr>
+                  <td><button class="chip-btn" type="button" data-action="select-axis" data-axis-id="${axis.id}">${esc(axis.name)}</button></td>
+                  <td>${rec ? esc(rec.motor.ModelNo) : "—"}</td>
+                  <td>${rec ? `${fmt(rec.motor.Watt, 1)} kW` : "—"}</td>
+                  <td>${rec ? pct(rec.inertiaRatio) : "—"}</td>
+                  <td>${rec ? `${fmt(rec.staticMargin, 2)}×` : "—"}</td>
+                  <td>${rec ? `${fmt(rec.peakTorque, 1)} N·m` : "—"}</td>
+                  <td>${rec ? `${fmt(rec.peakCurrent, 1)} A` : "—"}</td>
+                  <td>${fmt(result.base.motorSpeed, 0)} rpm</td>
+                  <td>${rec?.drive ? esc(rec.drive.ModelNo) : "—"}</td>
+                  <td><span class="tag ${result.status}">${statusText(result.status)}</span></td>
+                </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderResults() {
+  const root = $("#resultRoot");
+  if (!root) return;
+  const axis = activeAxis();
+  const result = state.results[axis.id];
+  if (!result) {
+    const isDirty = state.dirty[axis.id];
+    root.innerHTML = `
+      <section class="empty-state">
+        <div>
+          <div class="empty-state-mark">${isDirty ? "!" : "→"}</div>
+          <h3>${isDirty ? "参数已修改，等待重新计算" : "尚未生成选型结果"}</h3>
+          <p>工具按姿态自动确定抱闸要求，排除键槽/特殊结构，再逐台代入真实转子惯量、峰值扭矩、转速和电流。只使用核心 8 参数，不读取隐藏的工况假设。</p>
+          <div class="action-group" style="justify-content:center;margin-top:15px">
+            <button class="btn primary" type="button" data-action="calculate-axis">计算当前轴</button>
+            <button class="btn dark" type="button" data-action="calculate-all">计算全部轴</button>
+          </div>
+        </div>
+      </section>`;
+    return;
+  }
+
+  root.innerHTML = `
+    <section class="section-card">
+      ${renderResultHeader(result)}
+      <div class="stat-grid">
+        ${statCard("负载惯量 Jload", fmt(result.base.loadInertia * 1e4, 2), "×10⁻⁴", `ρ=${fmt(result.base.params.density, 0)} kg/m³`)}
+        ${statCard("电机转速", fmt(result.base.motorSpeed, 0), "rpm", `i=${fmt(result.base.ratio, 2)} · P=${fmt(num(axis.lead), 1)} mm`)}
+        ${statCard("静止扭矩需求", fmt(result.base.staticTorque, 2), "N·m", "须小于电机额定扭矩 / 3；v2：μ=0.10、Fprocess=0、Tpreload=0")}
+        ${statCard("惯量比基准峰值扭矩", fmt(result.base.referencePeakTorque, 2), "N·m", `λ=${fmt(result.base.inertiaLimitRatio * 100, 0)}% · K=${fmt(result.base.params.peakSafety, 3)}×`)}
+        ${statCard("基准峰值机械功率", fmt(result.base.referencePeakPower, 2), "kW", "按惯量比基准峰值扭矩估算")}
+        ${statCard("抱闸要求", num(axis.theta) > 1 ? "必须" : "不需要", "", `倾角 ${fmt(num(axis.theta), 1)}°`)}
+      </div>
+      ${renderAlerts(result, axis)}
+      ${renderRecommendation(result, axis)}
+      <div class="action-bar" style="margin-top:0;padding-top:0;border-top:0">
+        <div class="muted-text">状态：${statusText(result.status)} · 候选池 ${result.pool.length} 款 · 简易核心初选</div>
+        <div class="action-group">
+          <button class="btn ghost" type="button" data-action="copy-confluence">复制填表行</button>
+          <button class="btn ghost" type="button" data-action="export-csv">导出详细 CSV</button>
+          <button class="btn ghost" type="button" data-action="print-report">打印报告</button>
+          <button class="btn accent" type="button" data-action="calculate-all">重算全部轴</button>
+        </div>
+      </div>
+      ${renderCandidateTable(result, axis)}
+      ${renderCompareStrip(result)}
+      ${renderFormulaPanel(result)}
+      ${renderAxisMatrix()}
+    </section>`;
+}
+
+function calculateCurrent() {
+  const axis = activeAxis();
+  const errors = validateAxis(axis);
+  if (Object.keys(errors).length) {
+    renderForm();
+    showFieldErrors(axis, errors);
+    showToast("参数校验未通过，请修正红框字段", "error");
+    return false;
+  }
+  state.results[axis.id] = calculateAxis(axis);
+  delete state.dirty[axis.id];
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+  showToast(`${axis.name} 计算完成：${statusText(state.results[axis.id].status)}`);
+  $("#resultRoot").scrollIntoView({ behavior: "smooth", block: "start" });
+  return true;
+}
+
+function calculateAll() {
+  let firstInvalid = null;
+  const errorMap = new Map();
+  state.axes.forEach((axis) => {
+    const errors = validateAxis(axis);
+    if (Object.keys(errors).length) {
+      errorMap.set(axis.id, errors);
+      if (!firstInvalid) firstInvalid = axis;
+    }
+  });
+  if (firstInvalid) {
+    state.activeId = firstInvalid.id;
+    renderAxisRail();
+    renderForm();
+    showFieldErrors(firstInvalid, errorMap.get(firstInvalid.id));
+    renderResults();
+    showToast(`「${firstInvalid.name}」参数校验未通过`, "error");
+    return;
+  }
+  state.axes.forEach((axis) => {
+    state.results[axis.id] = calculateAxis(axis);
+    delete state.dirty[axis.id];
+  });
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  saveState();
+  const passed = state.axes.filter((axis) => state.results[axis.id]?.status === "pass").length;
+  showToast(`全部轴计算完成：${passed} 通过 / ${state.axes.length - passed} 未通过`);
+}
+
+function csvEscape(value) {
+  const text = String(value ?? "");
+  return /[",\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function downloadText(filename, text, mime = "text/plain;charset=utf-8") {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1200);
+}
+
+function exportCsv() {
+  const calculated = state.axes
+    .map((axis) => ({ axis, result: state.results[axis.id] }))
+    .filter((item) => item.result);
+  if (!calculated.length) {
+    showToast("请先计算至少一个轴", "error");
+    return;
+  }
+  const header = [
+    "轴", "计算方式", "电机型号", "物料号", "结构", "功率kW", "额定扭矩N·m", "最大扭矩N·m",
+    "转子惯量×10^-4", "惯量比%", "峰值扭矩N·m", "峰值电流A", "需求转速rpm", "最高转速rpm",
+    "静止扭矩需求N·m", "额定扭矩/3N·m", "静止扭矩余量x",
+    "推荐驱动", "驱动额定电流A", "驱动最大电流A",
+    "结论", "未通过项"
+  ];
+  const lines = [header.map(csvEscape).join(",")];
+  calculated.forEach(({ axis, result }) => {
+    result.candidates.forEach((candidate) => {
+      const motor = candidate.motor;
+      lines.push([
+        axis.name,
+        "简易核心初选",
+        motor.ModelNo,
+        motor.PartNo,
+        [motor.Brake ? "抱闸" : "无抱闸", motor.KeySlot ? "键槽" : "无键槽"].join("/"),
+        motor.Watt,
+        motor.RatedTorque,
+        motor.MaxTorque,
+        motor.RotorInertia,
+        candidate.inertiaRatio.toFixed(2),
+        candidate.peakTorque.toFixed(3),
+        candidate.peakCurrent.toFixed(3),
+        result.base.motorSpeed.toFixed(2),
+        motor.MaxSpeed,
+        result.base.staticTorque.toFixed(3),
+        candidate.staticLimit.toFixed(3),
+        candidate.staticMargin.toFixed(3),
+        candidate.drive?.ModelNo || "",
+        candidate.drive?.RatedCurrent ?? "",
+        candidate.drive?.MaxCurrent ?? "",
+        candidate.status === "pass" ? "通过" : "不通过",
+        candidate.failures.join(" / ")
+      ].map(csvEscape).join(","));
+    });
+  });
+  downloadText(`CF2512选型明细_${new Date().toISOString().slice(0, 10)}.csv`, `\uFEFF${lines.join("\r\n")}`, "text/csv;charset=utf-8");
+  showToast("详细 CSV 已导出");
+}
+
+function confluenceRows() {
+  const header = [
+    "轴", "速度/加速度需求", "电机方案", "加速电流需求(A)", "加速扭力需求(N·m)",
+    "电机最大扭力(N·m)", "需要电机转速(rpm)", "静止扭力需求(N·m)",
+    "预估负载惯量比(%)", "驱动器需求/最大电流(A)", "能满足", "不能满足原因"
+  ];
+  const rows = [header];
+  state.axes.forEach((axis) => {
+    const result = state.results[axis.id];
+    if (!result) return;
+    const rec = result.recommended;
+    rows.push([
+      axis.name,
+      `${fmt(num(axis.speed), 0)} m/min / ${fmt(num(axis.acceleration), 1)} G`,
+      rec ? rec.motor.ModelNo : "—",
+      rec ? fmt(rec.peakCurrent, 2) : "—",
+      rec ? fmt(rec.peakTorque, 2) : "—",
+      rec ? fmt(rec.motor.MaxTorque, 1) : "—",
+      fmt(result.base.motorSpeed, 0),
+      fmt(result.base.staticTorque, 2),
+      rec ? fmt(rec.inertiaRatio, 1) : "—",
+      rec?.drive ? `${fmt(rec.drive.requiredMax, 1)} / ${fmt(rec.drive.MaxCurrent, 1)}` : "—",
+      rec?.status === "pass" ? "是" : "否",
+      rec
+        ? rec.failures.length
+          ? rec.failures.join(" / ")
+          : "六项核心判据通过；含静止扭矩余量与驱动器 30% 电流余量"
+        : "无候选"
+    ]);
+  });
+  return rows.map((row) => row.join("\t")).join("\n");
+}
+
+async function copyConfluence() {
+  const text = confluenceRows();
+  if (!text) {
+    showToast("请先计算轴", "error");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("已复制制表符表格，可直接粘贴到 Excel / Confluence");
+  } catch (error) {
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    const copied = document.execCommand("copy");
+    area.remove();
+    showToast(copied ? "已复制制表符表格" : "复制失败，请使用详细 CSV 导出", copied ? "success" : "error");
+  }
+}
+
+function saveProject() {
+  const payload = {
+    schema: SCHEMA_VERSION,
+    exportedAt: new Date().toISOString(),
+    project: state.project,
+    axes: state.axes,
+    activeId: state.activeId
+  };
+  const safeName = (state.project.name || "CF2512选型项目").replace(/[\\/:*?"<>|]/g, "_");
+  downloadText(`${safeName}_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(payload, null, 2), "application/json;charset=utf-8");
+  showToast("项目 JSON 已保存");
+}
+
+function loadProjectFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result));
+      const loaded = normalizeState(parsed);
+      state.schema = SCHEMA_VERSION;
+      state.project = loaded.project;
+      state.axes = loaded.axes;
+      state.activeId = loaded.activeId;
+      state.results = {};
+      state.showAll = {};
+      state.dirty = {};
+      renderProjectFields();
+      renderAxisRail();
+      renderForm();
+      renderResults();
+      saveState();
+      showToast("项目已导入");
+    } catch (error) {
+      console.error(error);
+      showToast("项目文件无法解析", "error");
+    }
+  };
+  reader.readAsText(file, "utf-8");
+  $("#projectFile").value = "";
+}
+
+function printReport() {
+  if (!state.results[state.activeId]) {
+    showToast("请先计算当前轴", "error");
+    return;
+  }
+  window.print();
+}
+
+function handleAction(action, element) {
+  switch (action) {
+    case "select-axis":
+      switchAxis(element.dataset.axisId);
+      break;
+    case "add-axis":
+      addAxis(null);
+      break;
+    case "duplicate-axis":
+      duplicateAxis();
+      break;
+    case "delete-axis":
+      deleteAxis();
+      break;
+    case "save-project":
+      saveProject();
+      break;
+    case "load-project":
+      $("#projectFile").click();
+      break;
+    case "calculate-axis":
+      calculateCurrent();
+      break;
+    case "calculate-all":
+      calculateAll();
+      break;
+    case "formula":
+      openFormulaModal();
+      break;
+    case "guide":
+      openGuideModal();
+      break;
+    case "close-modal":
+      closeFormulaModal();
+      break;
+    case "close-guide":
+      closeGuideModal();
+      break;
+    case "set-theta":
+      applyTheta(Number(element.dataset.theta));
+      break;
+    case "toggle-candidates":
+      state.showAll[state.activeId] = !state.showAll[state.activeId];
+      renderResults();
+      break;
+    case "copy-confluence":
+      copyConfluence();
+      break;
+    case "export-csv":
+      exportCsv();
+      break;
+    case "print-report":
+      printReport();
+      break;
+    default:
+      break;
+  }
+}
+
+function bindEvents() {
+  document.addEventListener("click", (event) => {
+    const actionElement = event.target.closest("[data-action]");
+    if (actionElement) {
+      handleAction(actionElement.dataset.action, actionElement);
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    const projectInput = event.target.closest("[data-project]");
+    if (projectInput) {
+      state.project[projectInput.dataset.project] = projectInput.value;
+      saveState();
+      return;
+    }
+    if (event.target.matches("#formRoot [data-field]")) {
+      updateAxisField(event.target);
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    if (event.target.matches("#formRoot select[data-field]")) {
+      updateAxisField(event.target);
+    }
+  });
+
+  $("#projectFile").addEventListener("change", (event) => {
+    loadProjectFile(event.target.files?.[0]);
+  });
+
+  $("#formulaModal").addEventListener("click", (event) => {
+    if (event.target === event.currentTarget) closeFormulaModal();
+  });
+
+  $("#guideModal").addEventListener("click", (event) => {
+    if (event.target === event.currentTarget) closeGuideModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeFormulaModal();
+      closeGuideModal();
+    }
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      event.preventDefault();
+      calculateAll();
+    }
+  });
+}
+
+function runSelfTests() {
+  const results = [];
+  const assertClose = (name, actual, expected, tolerance) => {
+    const pass = Math.abs(actual - expected) <= tolerance;
+    results.push(`${pass ? "PASS" : "FAIL"}  ${name}: ${actual} (expected ${expected} ±${tolerance})`);
+  };
+  const assertTrue = (name, condition) => {
+    results.push(`${condition ? "PASS" : "FAIL"}  ${name}`);
+  };
+
+  const zAxis = { ...makeAxis("Z"), id: "selftest_z", name: "Self-test Z" };
+  const zBase = computeBase(zAxis);
+  assertClose("Z core Jload ×10⁻⁴", zBase.loadInertia * 1e4, 32.17, 0.1);
+  assertClose("Z core motor speed rpm", zBase.motorSpeed, 3000, 0.2);
+  assertClose("Z core gravity load torque N·m", zBase.loadTorque, 0.9903, 0.001);
+
+  const am540 = MOTORS.find((motor) => motor.ModelNo === "AM5-40-F3");
+  const zCandidate = evaluateMotor(zBase, am540);
+  assertClose("AM5-40-F3 inertia ratio %", zCandidate.inertiaRatio, 241.91, 0.2);
+  assertClose("AM5-40-F3 peak torque N·m", zCandidate.peakTorque, 11.80, 0.1);
+  assertClose("AM5-40-F3 peak current A", zCandidate.peakCurrent, 9.13, 0.1);
+  assertTrue("core checks use exactly six criteria", zCandidate.failures.length === 0 && zCandidate.status === "pass");
+  assertTrue("F-series drive matching stays in SPD family", zCandidate.drive?.ModelNo === "SPD32F1-050");
+
+  const v2Axis = {
+    ...makeAxis("Z"),
+    id: "selftest_v2",
+    name: "Self-test v2 reference case",
+    mass: 400,
+    ratio: 1,
+    lead: 20,
+    diameter: 40,
+    length: 1025,
+    theta: 0,
+    speed: 60,
+    acceleration: 0.5
+  };
+  const v2Base = computeBase(v2Axis);
+  assertClose("v2 reference Jload x10^-4", v2Base.loadInertia * 1e4, 60.813, 0.01);
+  assertClose("v2 reference Jmotor x10^-4", v2Base.referenceMotorInertia * 1e4, 20.271, 0.01);
+  assertClose("v2 reference motor speed rpm", v2Base.motorSpeed, 3000, 0.1);
+  assertClose("v2 reference load torque N·m", v2Base.loadTorque, 1.4147, 0.001);
+  assertClose("v2 reference peak torque N·m", v2Base.referencePeakTorque, 16.903, 0.001);
+
+  const xAxis = { ...makeAxis("X"), id: "selftest_x", name: "Self-test X" };
+  const yAxis = { ...makeAxis("Y"), id: "selftest_y", name: "Self-test Y" };
+  const xBase = computeBase(xAxis);
+  const yBase = computeBase(yAxis);
+  assertClose("X v2 static torque includes friction", xBase.staticTorque, 10.61, 0.02);
+  assertClose("Y v2 static torque follows original angle convention", yBase.staticTorque, 22.16, 0.02);
+  assertClose("Z v2 static torque includes friction", zBase.staticTorque, 0.99, 0.02);
+  const xResult = calculateAxis(xAxis);
+  const yResult = calculateAxis(yAxis);
+  const zResult = calculateAxis(zAxis);
+  assertTrue("X core recommendation", xResult.recommended?.motor.ModelNo === "AM95-20-F1");
+  assertTrue("Y recommends AM90-30B-F4", yResult.recommended?.motor.ModelNo === "AM90-30B-F4");
+  assertTrue("Y has one fully compliant candidate", yResult.status === "pass" && yResult.passCount === 1);
+  assertTrue("Z core recommendation", zResult.recommended?.motor.ModelNo === "AM5-40-F3");
+  assertTrue("AM90-30B-F4 uses brake rotor inertia 353", yResult.recommended?.motor.Brake === true &&
+    yResult.recommended?.motor.RotorInertia === 353);
+  assertTrue("AM90-30B-F4 matches SPD32B1-450", yResult.recommended?.drive?.ModelNo === "SPD32B1-450");
+  const am9030 = MOTORS.find((motor) => motor.ModelNo === "AM90-30-F4");
+  assertTrue("AM90-30-F4 is a non-brake model with rotor inertia 297", am9030?.Brake === false &&
+    am9030?.RotorInertia === 297);
+  assertTrue("X still recommends the smaller AM95-20-F1", xResult.recommended?.motor.ModelNo === "AM95-20-F1");
+  const am3530 = MOTORS.find((motor) => motor.ModelNo === "AM35-30B-F5");
+  const y35Candidate = evaluateMotor(computeBase(yAxis), am3530);
+  assertTrue("35 N·m rated motor fails Y static criterion", y35Candidate.failures.includes("静止扭矩"));
+  assertTrue("vertical axis requires brake", motorPool(yAxis).every((motor) => motor.Brake));
+  assertTrue("horizontal axis excludes brake", motorPool(zAxis).every((motor) => !motor.Brake));
+
+  const standardPool = motorPool({ ...zAxis, structurePolicy: "standard" });
+  const allStructurePool = motorPool({ ...zAxis, structurePolicy: "all" });
+  const fullCatalogPool = motorPool({ ...zAxis, brakePolicy: "any", structurePolicy: "all" });
+  assertTrue("standard structure excludes K/SK/BK motors", standardPool.every((motor) => !motor.KeySlot));
+  assertTrue("all structure includes keyed motors", allStructurePool.some((motor) => motor.KeySlot));
+  assertTrue("all structure preserves all 68 F-series entries", fullCatalogPool.length === MOTORS.length && MOTORS.length === 68);
+
+  const am9520 = MOTORS.find((motor) => motor.ModelNo === "AM95-20-F1");
+  const drive = findDrive(am9520, 22.72);
+  assertClose("drive required max current includes 30% reserve", drive?.requiredMax ?? NaN, 135.95, 0.1);
+  assertTrue("drive match applies 30% max-current reserve", drive?.ModelNo === "SPD32B1-450" && drive?.designFactor === FIXED.driveCurrentReserve);
+  assertTrue("new projects contain only core fields", defaultState().axes.every((axis) =>
+    !["bore", "friction", "processForce", "preload", "extraInertia", "stroke", "dwell", "inertiaLimit", "peakSafety", "efficiency", "density"]
+      .some((key) => Object.hasOwn(axis, key))));
+  const legacyState = normalizeState({
+    schema: 4,
+    project: { name: "Legacy", author: "Legacy Owner", inputMode: "pro", checkLevel: "enhanced" },
+    axes: [{ ...clone(PRESETS.X), bore: 10, friction: 0.005, processForce: 1000, preload: 1.29 }]
+  });
+  assertTrue("legacy hidden assumptions are stripped on import", legacyState.axes.every((axis) =>
+    !["bore", "friction", "processForce", "preload", "extraInertia", "stroke", "dwell", "inertiaLimit", "peakSafety", "efficiency", "density"]
+      .some((key) => Object.hasOwn(axis, key))));
+  assertTrue("legacy mode switches are stripped on import", !("inputMode" in legacyState.project) && !("checkLevel" in legacyState.project));
+  assertTrue("selection owner field is removed", !$("#projectAuthor") && !Object.hasOwn(defaultState().project, "author"));
+  assertTrue("legacy selection owner is stripped on import", !Object.hasOwn(legacyState.project, "author"));
+  assertTrue("form renders no optional-pro controls", !$("#formRoot").querySelector("[data-input-mode], [data-check-level], [data-mode]"));
+  assertTrue("new projects use schema 5", defaultState().schema === 5);
+  assertTrue("parameter guide modal exists", Boolean($("#guideModal")));
+
+  const passCount = results.filter((line) => line.startsWith("PASS")).length;
+  const output = `${passCount}/${results.length} checks passed\n\n${results.join("\n")}`;
+  console.log(output);
+  const pre = document.createElement("pre");
+  pre.id = "selftest";
+  pre.textContent = output;
+  pre.style.cssText = "position:fixed;left:-10000px;top:0;white-space:pre";
+  document.body.appendChild(pre);
+  return passCount === results.length;
+}
+
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedAxis = String(params.get("axis") || "").toUpperCase();
+  const matchedAxis = state.axes.find((axis) => String(axis.name || "").toUpperCase().startsWith(requestedAxis));
+  if (requestedAxis && matchedAxis) {
+    state.activeId = matchedAxis.id;
+  }
+  renderProjectFields();
+  renderAxisRail();
+  renderForm();
+  renderResults();
+  bindEvents();
+  saveState();
+  if (params.get("selftest") === "1") {
+    const passed = runSelfTests();
+    document.body.dataset.selftest = passed ? "pass" : "fail";
+  }
+  if (params.get("autocalc") === "1") {
+    try {
+      calculateAll();
+      document.body.dataset.autocalc = "done";
+    } catch (error) {
+      console.error(error);
+      document.body.dataset.autocalc = "error";
+      const pre = document.createElement("pre");
+      pre.id = "runtimeError";
+      pre.textContent = error?.stack || String(error);
+      pre.style.cssText = "position:fixed;left:-10000px;top:0;white-space:pre";
+      document.body.appendChild(pre);
+    }
+  }
+  if (params.get("view") === "result") {
+    setTimeout(() => $("#resultRoot")?.scrollIntoView({ block: "start" }), 120);
+  }
+  if (params.get("guide") === "1") {
+    setTimeout(openGuideModal, 80);
+  }
+}
+
+init();
+
+  </script>
+</body>
+</html>
