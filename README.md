@@ -1,6 +1,6 @@
-# CF2512 Servo Sizing Workbench
+# Servo Sizing Workbench
 
-Public GitHub Pages deployment of the CF2512 F-series servo motor and drive sizing workbench.
+Public GitHub Pages deployment of the F-series servo motor and drive sizing workbench.
 
 ## Public URL
 
