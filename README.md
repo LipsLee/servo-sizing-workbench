@@ -11,7 +11,7 @@ https://lipslee.github.io/cf2512-servo-sizing-workbench/
 - Uses the original v2 calculation convention for core screw-axis sizing.
 - Retains the project-specific rated-torque / 3 static check and 0.7 drive-current reserve.
 - Includes 17 SynTec single-axis drives and 16 multi-axis drive configurations from the V3.14.0 selection manual.
-- Uses multi-axis modules first and falls back to single-axis drives only when no multi-axis module meets the current requirement.
+- Uses a multi-axis drive only when one unit can cover every calculated axis with distinct axis modules; if any axis cannot be covered, all axes use single-axis drives.
 - Includes the AM90-30-F4 and AM90-30B-F4 catalog entries.
 - Intended for preliminary selection; special process forces, preload, duty cycle, and thermal requirements still require separate verification.
 
