@@ -4,7 +4,7 @@ Public GitHub Pages deployment of the F-series servo motor and drive sizing work
 
 ## Public URL
 
-https://lipslee.github.io/cf2512-servo-sizing-workbench/
+https://lipslee.github.io/servo-sizing-workbench/
 
 ## Scope
 
